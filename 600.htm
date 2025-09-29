@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>使用者資料查詢 (本機版本)</title>
+
+
+
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -60,8 +63,7 @@
       <h1>三年級查詢OpenID</h1>
       <form id="dataForm" action="https://script.google.com/a/macros/gsm.kh.edu.tw/s/AKfycbwASsHlQ3nlbKpppep6rKHmJsllqCUgd-WljBPeAwAItIQe_PG3sDvwHdJeo0FdRrSZ/exec" method="POST">
         <label for="gmail">Gmail：</label>
-        <input type="text" id="gmail" name="gmail" value="@gsm.kh.edu.tw" required>
-
+       <input type="text" id="gmail" name="gmail" required autocomplete="email"> 
         <label for="ps">密碼：</label>
         <input type="password" id="ps" name="ps" required>
 
