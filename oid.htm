@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+  <meta charset="UTF-8">
+<script src="oid.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>表單輸入與 PEO 陣列查詢</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .form-container { max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"] { width: 100%; padding: 8px; border: 1px solid #ddd; box-sizing: border-box; }
+        button { background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
+        #output { margin-top: 20px; padding: 10px; border: 2px dashed #007bff; min-height: 50px; }
+
+.form-group-grid {
+    display: grid; /* 啟用 Grid */
+    grid-template-columns: 100px 1fr; /* 第一欄寬100px，第二欄佔滿剩餘空間 */
+    gap: 10px; /* 欄位間距 */
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+    </style>
+</head>
+<body>
+<center>
+    <h1>OpenID查詢系統</h1>
+   
+    <div class="form-container">
+        <form id="queryForm" onsubmit="return handleQuery(event)">
+
+<div class="form-group-grid">
+    <label for="col1_input">帳號：</label>
+    <input type="text" id="col1_input" name="col1_input" size="30" value="@gsm.kh.edu.tw"  style="font-size:16px;"   required>（Gmail）
+</div>
+
+<div class="form-group-grid">
+                <label for="col2_input">密碼：</label>
+                <input type="password" id="col2_input" name="col2_input" style="font-size:16px;" value='' required>
+</div>
+            
+            <button type="submit">送出並查詢</button>
+            
+        </form>
+    </div>
+
+    <h2>查詢結果</h2>
+    <div id="output">結果將顯示在這裡...</div>
+
+    <script>
+let decodedData = '';
+    try {
+        decodedData = atob(exam2);
+    } catch (e) {
+        // 如果 base64 字串格式錯誤，解碼會失敗
+        console.error("解碼錯誤:", e);
+        decodedData = "Base64 解碼失敗，字串格式可能錯誤。";
+    }
+
+    // 3. 顯示解碼後的內容
+bb = decodedData.replaceAll("ggsm", "@gsm").replaceAll("+", ",");
+aa="0,石明珠#1,吳沛純#2,吳婕榕#3,李雅萍#4,林宜璇#5,孫沛岑#6,孫珮甄#7,陳子昀#8,陳鈺欣#9,詹汭涵#10,趙子暄#11,蔡禹彤#12,蔣宇欣#13,羅以筑#14,朱奕恩#15,何允翔#16,宋昭益#17,張晏祖#18,張剴政#19,張賢睿#20,郭彝綸#21,陳則叡#22,陳威菡#23,陳首騰#24,楊宏均#25,劉秉堯#26,劉軒源#27,蔡岳廷#28,中井蓮#29,江幸子#30,吳昀芯#31,吳湘嵐#32,徐婕恩#33,翁婕恩#34,張勻嘉#35,梁育綺#36,黃瓴葳#37,黃毓恩#38,賴亭羽#39,王旭楠#40,江宥霆#41,余建平#42,吳建霆#43,李冠霆#44,林煜翔#45,徐鈺凱#46,陳冠佑#47,陳閔宥#48,黃俊瑋#49,蔡丞祐#50,蔡竣宇#51,蔡耀陞#52,謝丞智#53,藍偉哲#54,丁慈#55,呂滋汝#56,許哲祥#57,黃姿禎#58,王沛宸#59,余昱亭#60,李念臻#61,杜欣樺#62,林育慈#63,侯函妤#64,張如涵#65,許欣怡#66,陳姿妤#67,曾湘云#68,黃韻洺#69,劉孟雯#70,劉盈圻#71,王瑞樟#72,林侑廷#73,林哲名#74,徐易楠#75,曹宗祺#76,莊名彥#77,陳至剛#78,曾帝涵#79,黃威凱#80,楊祐睿#81,董騰心#82,劉有承#83,蔡忠澄#84,陳蓉品#85,劉歆涔#86,步慶煌#87,余如儀#88,李函穎#89,李宛宸#90,林巧妤#91,林亭均#92,邱淕涵#93,洪妤蕎#94,高婕貽#95,陳姮霏#96,曾捷恩#97,曾新夏#98,黃品璇#99,楊琇涵#100,楊瑾文#101,劉祐慈#102,王秉祥#103,李祐恩#104,林涌田#105,馬楷鈞#106,張宏宇#107,張宸維#108,陳奕辰#109,黃丞佑#110,黃俊瑋#111,黃翊翔#112,楊宸羽#113,葉旻宥#114,劉宇哲#115,蔡典祐#116,石芯語#117,李奕軒#118,李婕寧#119,林巧歆#120,林禹彤#121,洪小函#122,洪如耘#123,徐子晴#124,徐子渲#125,高涵瑢#126,高暄庭#127,黃巾瑜#128,蔡易璇#129,吳和縛#130,吳昊鈞#131,吳保聖#132,李宥恩#133,杜宥愷#134,施秉佑#135,施景旭#136,陳玹宥#137,黃柏堉#138,楊宗凡#139,葉弘裕#140,潘仲霆#141,蔣鴻偉#142,蕭立晟#143,藍宥恩#144,謝詠鑫#145,尤郁芳#146,王葳涵#147,王繪媛#148,朱若菡#149,李意晴#150,胡聿采#151,許甯期#152,陳彥蓁#153,陳麗文#154,黃品溦#155,黃馨樂#156,楊堇妍#157,謝宛妤#158,鍾芷菱#159,王為行#160,朱冠宇#161,李品毅#162,姚冠宇#163,洪正隆#164,莊崴峻#165,莊騰絨#166,陳宥熏#167,曾宇謙#168,黃宥瑞#169,楊鎮齊#170,董柏毅#171,劉杰忻#172,蔡芸蓉#173,潘嘉凱#174,李羽絜#175,李羽蕎#176,林沛緹#177,林岱瑾#178,柯禹安#179,孫怡涵#180,張家蓁#181,陳至柔#182,陳姵伊#183,童珮慈#184,楊珮恩#185,潘麒屹#186,鄭愷棠#187,藍云佑#188,宋長志#189,林宥叡#190,莊嘉維#191,許中瀚#192,郭峻滎#193,陳靖彥#194,陳摯倗#195,黃鈞揚#196,葉宥祺#197,董家丞#198,劉品葳#199,鄭崴澤#200,謝弘晏#201,蘇紘睿#202,方語晨#203,何允熙#204,吳軒菱#205,吳偌瑄#206,李允溱#207,林芯慧#208,張鈞媃#209,張慈涵#210,連子萱#211,連湘芸#212,陳彩慈#213,陳雅蕙#214,潘加芯#215,謝祐晴#216,蘇依廷#217,巴柏彥#218,王子晉#219,林彥樺#220,柯佑恩#221,馬翊愷#222,高晟珉#223,曾皓恩#224,曾瀧漢#225,黃聖益#226,管祥潁#227,蔡昕言#228,薛亦庭#229,顏承宥#230,蘇禹仲#231,吳涓涓#232,李羽捷#233,陳郁芳#234,鄭薇#235,力品睿#236,吳柏勳#237,林尚瑋#238,張哲瑋#239,張煜承#240,張瑞軒#241,郭峻宏#242,陳新樹#243,陳璽安#244,鄭竑彥#245,蘇騏騰#246,朱鈞隆#"
+
+     
+        
+        // 依據換行符 \n 分割字串，建立 PEO 陣列 (每行是一個元素)
+        const PEO = bb.split('/').filter(line => line.trim() !== ""); // 過濾掉空行
+        const peoaa = aa.split('#').filter(line => line.trim() !== ""); // 過濾掉空行
+
+        /**
+         * 處理表單提交事件並執行查詢
+         * @param {Event} event - 表單提交事件對象
+         * @returns {boolean} - 始終返回 false 以阻止瀏覽器預設的表單提交行為
+         */
+        function handleQuery(event) {
+            // 阻止瀏覽器執行預設的提交行為 (即：阻止頁面刷新或跳轉)
+            event.preventDefault();
+
+            // 1. 取得使用者輸入的值
+            const targetCol1Value = document.getElementById('col1_input').value.trim();
+            const targetCol2Value = document.getElementById('col2_input').value.trim();
+
+            let resultHTML = ""; // 用於儲存查詢結果的 HTML
+            let found = false;
+
+            // 2. 執行 PEO 陣列查詢
+            for (let i = 0; i < PEO.length; i++) {
+                const rowString = PEO[i];
+
+                // 將每行字串依據逗號 , 分割成欄位 (Fields)
+                const fields = rowString.split(','); 
+
+                // 檢查欄位數是否足夠（至少要有 5 個欄位才能取得 y, d）
+                if (fields.length >= 5) { 
+                    
+                    // 條件檢查：第 1 欄 (索引 1) 是否等於輸入值
+                    // 條件檢查：第 2 欄 (索引 2) 是否等於輸入值
+                    if (fields[1] === targetCol1Value && fields[2] === targetCol2Value) {
+                        
+                        // 條件符合，取出第 3 欄 (索引 3) 的值 'y'
+	         const ii = fields[0];
+                        const col3Value = peoaa[ii] ;
+                        const col2Value = fields[3]; 
+                        // 取出第 4 欄 (索引 4) 的值 'd'
+                        const col4Value = fields[4]; 
+                        
+                        // 將結果格式化輸出 (顯示 y 和 d)
+                        resultHTML += `姓　名：${col3Value}<br>`;
+                        resultHTML += `OpenID：${col2Value}<br>`;
+                        resultHTML += `密　碼：${col4Value}<br><hr>`;
+                        
+                        found = true;
+                        // 如果只需要顯示第一個符合的結果，可以在這裡加上 break;
+                    }
+                }
+            }
+
+            // 3. 顯示結果到網頁上
+            const outputElement = document.getElementById('output');
+            if (!found) {
+                outputElement.innerHTML = `查無符合條件(Gmail、密碼有誤) 。`;
+                outputElement.style.color = "red";
+            } else {
+                outputElement.innerHTML = resultHTML;
+                outputElement.style.color = "darkgreen";
+            }
+
+            // 阻止表單送出（頁面刷新）
+            return false;
+        }
+    </script>
+
+</body>
+</html>
