@@ -1,31 +1,24 @@
 <meta charset="UTF-8">
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!DOCTYPE html>
-<html>
-<head>
-<title>Apps Script 查詢與 ID 轉換範例</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apps Script 自動查詢工具</title>
 </head>
 <body>
-
-<h1>Apps Script 查詢工具 (整合 code2.gs)</h1>
-<p>本頁面將自動獲取當前網址，轉換 ID，並查詢 Key。</p>
-<button onclick="queryKeyFromUrl()">發送請求</button>
 
 <hr>
 
 <p>
-  <strong>本頁完整網址 (送出):</strong> <span id="fullUrlDisplay" style="color: grey;"></span><br>
- <span id="idSearchedDisplay" style="color: orange;"></span><br>
-  <strong>回傳 KEY 值:</strong> <span id="keyResult" style="color: blue; font-weight: bold;"></span>
+    <strong>本頁完整網址 (送出):</strong> <span id="fullUrlDisplay" style="color: grey;"></span><br>
+    <span id="idSearchedDisplay" style="color: orange;"></span><br>
+    <strong>回傳 KEY 值:</strong> <span id="keyResult" style="color: blue; font-weight: bold;"></span>
 </p>
 <p id="message" style="color: red;"></p>
 
 <script>
 // 【重要】請將這裡替換為您在步驟二部署後獲得的「網路應用程式網址」
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzaBCu9eaxIn7jf0txSAWQrPT_aeWZxdPb0y5IkKICAElSTes-QZB20YWA49kOfOppF/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzU1nR97egwNLFzixe9eTe7JpYs7H6Z_t3Yar9u1Wl4RR0Isbq2JvPWw881ja4ZyoLP/exec";
 
 function queryKeyFromUrl() {
     const fullUrl = window.location.href; // 獲取本機網址
@@ -36,8 +29,8 @@ function queryKeyFromUrl() {
     const message = document.getElementById('message');
     
     urlDisplay.textContent = fullUrl;
-    idDisplay.textContent = '...';
-    keyResult.textContent = '...';
+    idDisplay.textContent = '... 正在提取 ID';
+    keyResult.textContent = '... 正在查詢';
     message.textContent = '';
     
     if (WEB_APP_URL === "YOUR_NEW_CODE2.GS_WEB_APP_URL") {
@@ -57,13 +50,14 @@ function queryKeyFromUrl() {
         })
         .then(data => {
             // 顯示 Apps Script 處理的 ID
-            idDisplay.textContent = data.id_searched || 'N/A';
+            idDisplay.textContent = `提取並轉換的 ID: ${data.id_searched || 'N/A'}`;
             
             if (data.status === "success" && data.key) {
                 // 成功回傳 KEY
                 keyResult.textContent = data.key; 
+                message.textContent = data.message || ''; // 顯示預設值提示 (如果有的話)
             } else if (data.status === "not_found") {
-                // ID 在試算表中未找到
+                // ID 在試算表中未找到 (理論上新版 GS 不會走到這裡，會回傳預設值)
                 keyResult.textContent = '未找到';
                 message.textContent = `查詢失敗: ${data.error}`;
             } else if (data.error) {
@@ -82,6 +76,9 @@ function queryKeyFromUrl() {
             message.textContent = `無法連線到 Google Script: ${error.message}`;
         });
 }
+
+// 🚨 網頁載入完成後，自動執行請求
+queryKeyFromUrl(); 
 </script>
 
 </body>
