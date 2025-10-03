@@ -1,0 +1,85 @@
+<meta charset="UTF-8">
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Apps Script 查詢與 ID 轉換範例</title>
+</head>
+<body>
+
+<h1>Apps Script 查詢工具 (整合 code2.gs)</h1>
+<p>本頁面將自動獲取當前網址，轉換 ID，並查詢 Key。</p>
+<button onclick="queryKeyFromUrl()">發送請求</button>
+
+<hr>
+
+<p>
+  <strong>本頁完整網址 (送出):</strong> <span id="fullUrlDisplay" style="color: grey;"></span><br>
+  <strong>提取並轉換的 ID:</strong> <span id="idSearchedDisplay" style="color: orange;"></span><br>
+  <strong>回傳 KEY 值:</strong> <span id="keyResult" style="color: blue; font-weight: bold;"></span>
+</p>
+<p id="message" style="color: red;"></p>
+
+<script>
+// 【重要】請將這裡替換為您在步驟二部署後獲得的「網路應用程式網址」
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxt2zKG2GzG0ehrsBFVB6XQm09gLRJOkN-LPV3USdBKvva3gph1ytu-9fY38OoymMLR/exec";
+
+function queryKeyFromUrl() {
+    const fullUrl = window.location.href; // 獲取本機網址
+    
+    const urlDisplay = document.getElementById('fullUrlDisplay');
+    const idDisplay = document.getElementById('idSearchedDisplay');
+    const keyResult = document.getElementById('keyResult');
+    const message = document.getElementById('message');
+    
+    urlDisplay.textContent = fullUrl;
+    idDisplay.textContent = '...';
+    keyResult.textContent = '...';
+    message.textContent = '';
+    
+    if (WEB_APP_URL === "YOUR_NEW_CODE2.GS_WEB_APP_URL") {
+        message.textContent = "請先替換 WEB_APP_URL 變數。";
+        return;
+    }
+    
+    // 構造帶有 'referer_url' 參數的 URL
+    const queryUrl = `${WEB_APP_URL}?referer_url=${encodeURIComponent(fullUrl)}`;
+
+    fetch(queryUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
+            }
+            return response.json(); 
+        })
+        .then(data => {
+            // 顯示 Apps Script 處理的 ID
+            idDisplay.textContent = data.id_searched || 'N/A';
+            
+            if (data.status === "success" && data.key) {
+                // 成功回傳 KEY
+                keyResult.textContent = data.key; 
+            } else if (data.status === "not_found") {
+                // ID 在試算表中未找到
+                keyResult.textContent = '未找到';
+                message.textContent = `查詢失敗: ${data.error}`;
+            } else if (data.error) {
+                // Apps Script 執行錯誤
+                keyResult.textContent = '執行錯誤';
+                message.textContent = `Apps Script 錯誤: ${data.error}`;
+            } else {
+                // 未知錯誤
+                keyResult.textContent = '失敗';
+                message.textContent = '查詢失敗，回傳格式錯誤。';
+            }
+        })
+        .catch(error => {
+            console.error('Fetch 錯誤:', error);
+            keyResult.textContent = '連線錯誤';
+            message.textContent = `無法連線到 Google Script: ${error.message}`;
+        });
+}
+</script>
+
+</body>
+</html>
