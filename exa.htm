@@ -1,0 +1,34 @@
+<meta charset="UTF-8">
+<script>
+// **步驟 1: 讀取 URL 參數**
+// 創建一個 URLSearchParams 物件，它會自動解析當前頁面 URL 中的查詢字串
+const urlParams = new URLSearchParams(window.location.search);
+
+// 讀取 gm 和 seat 的值
+const gmValue = urlParams.get('gm');
+const seatValue = urlParams.get('seat');
+
+console.log('從 URL 讀取到的 gm:', gmValue);
+console.log('從 URL 讀取到的 seat:', seatValue);
+
+
+// **步驟 2: 存入全域變數 (localStorage)**
+// localStorage 具有持久性，資料會保留在瀏覽器中，直到被清除。
+// 即使關閉瀏覽器或跳到不同網頁，只要是同一個網域，都可以存取。
+
+if (gmValue) {
+    // 存入 gm 變數
+    localStorage.setItem('Global_GM', gmValue);
+}
+
+if (seatValue) {
+    // 存入 seat 變數
+    localStorage.setItem('Global_SEAT', seatValue);
+}
+
+
+  window.location.href = "EXA2.htm";
+
+
+
+</script>
