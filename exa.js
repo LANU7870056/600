@@ -110,7 +110,7 @@ const questionBank = [
     {
         question: "Excel中計算名次，要使用那一個函數?",
         options: ["Rank", "Sum", "Average", "Max"],
-        answer: "RANK",
+        answer: "Rank",
         explanation: "在 Excel 中，RANK 函數用於計算一個數字在一組數字中的排名。"
     },
     {
