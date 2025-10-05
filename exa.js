@@ -18,7 +18,7 @@ const questionBank = [
         explanation: "資料是指一堆未經過整理的文字、數字，本身不具備特定意義。"
     },
     {
-        question: "下列何者為雲端硬碟的特性?",
+        question: "下列何者為「雲端硬碟」的特性?",
         options: ["能透過網路連線，隨時存取網路儲存空間的資料", "可存放許多資料，永遠無容量限制", "僅可存放文件型態資料及影音檔案", "雲端硬碟的資料，具有保密性、唯一性，一定不會遭竊取、竄改及盜用"],
         answer: "能透過網路連線，隨時存取網路儲存空間的資料",
         explanation: "雲端硬碟有容量限制，可存放多種類型檔案，若帳號密碼外洩仍有遭竊取等疑慮。"
@@ -30,7 +30,7 @@ const questionBank = [
         explanation: "電腦運作基於二進制系統，將資料轉換成0與1可以讓電腦進行計算和處理。"
     },
     {
-        question: "下列何者為心智圖軟體的用途?",
+        question: "下列何者為「心智圖」軟體的用途?",
         options: ["幫助我們整理資料，歸納分析相關因素", "瞭解個人心智狀態，能快速尋求醫生治療", "瞭解個人身心靈狀態，檢查睡眠品質及健康情形", "幫助我們能以圖表展示個人智商成績"],
         answer: "幫助我們整理資料，歸納分析相關因素",
         explanation: "心智圖軟體主要用於腦力激盪、整理思緒與規劃分析。"
@@ -108,13 +108,13 @@ const questionBank = [
         explanation: "「檢視者」權限在雲端硬碟中僅擁有查看文件內容的權限，無法對文件進行編輯或刪除。"
     },
     {
-        question: "計算名次，要使用那一個函數?",
-        options: ["RANK", "SUM", "AVERAGE", "MAX"],
+        question: "Excel中計算名次，要使用那一個函數?",
+        options: ["Rank", "Sum", "Average", "Max"],
         answer: "RANK",
         explanation: "在 Excel 中，RANK 函數用於計算一個數字在一組數字中的排名。"
     },
     {
-        question: "將分數不及格的儲存格標示為紅色，是使用什麼功能?",
+        question: "Excel中將分數不及格的儲存格標示為紅色，是使用什麼功能?",
         options: ["格式化為表格", "資料清除", "設定格式化的條件", "儲存格格式"],
         answer: "設定格式化的條件",
         explanation: "「設定格式化的條件」功能可以根據儲存格的值自動應用不同的格式，例如顏色。"
@@ -132,7 +132,7 @@ const questionBank = [
         explanation: "掃描文件是將紙本資料轉換成數位格式的常見方法。"
     },
     {
-        question: "下列何者為「文字檔」檔案?",
+        question: "下列何者為「文字檔」檔案格式?",
         options: ["file.jpg", "text.bmp", "study.sb3", "list.txt"],
         answer: "list.txt",
         explanation: "文字檔的副檔名通常是 .txt。"
