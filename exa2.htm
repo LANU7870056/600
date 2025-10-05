@@ -84,7 +84,8 @@
                     <label for="studentName" class="text-lg font-medium text-slate-700">班級座號</label>
                     <input type="text" id="studentName" readonly style="background-color: #f0f0f0;" class="mt-1 block w-full border border-slate-300 focus:ring-blue-500 focus:border-blue-500" placeholder="請輸入您的姓名">
                 </div><font color="#F00">考試時間20分鐘，要「繳交試卷」請舉手，待老師到，再按「繳交試卷」（關閉視為0分）</font>
-                <button id="start-btn" class="w-full btn bg-blue-500 text-white hover:bg-blue-600">開始測驗</button>
+	<div id="sayy">檢查中……</div>
+                <button style="display: none;" id="start-btn" class="w-full btn bg-blue-500 text-white hover:bg-blue-600">開始測驗</button>
             </div>
         </div>
 
@@ -347,6 +348,7 @@
 
             console.log('成績發送至 Apps Script 完成。');
             showModal('成績已成功送出！');
+            window.close();
 
         } catch (error) {
             console.error('發送成績至 Apps Script 失敗:', error);
@@ -479,6 +481,106 @@
         link.click();
         document.body.removeChild(link);
     }
+
+//~~~~~~~~~~~~
+
+ // 您提供的 Google Apps Script URL
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzzPfTPtIs7k7q8tVMwpiWQpRMbV_-5rxo82YHkTGExdQoevZy7GEF9tsQmy8OvXGhOgw/exec"; 
+    
+    // 獲取 HTML 元素 (這些元素必須在 HTML 頁面中存在)
+    const form = document.getElementById('queryForm');
+    const gmailInput = document.getElementById('gmailInput');
+    const resultDiv = document.getElementById('result');
+    const submitButton = document.getElementById('submitButton');
+
+    // 預設查詢的 GMAIL 帳號
+    const DEFAULT_GMAIL = storedGM;
+
+    /**
+     * 自動執行 GMAIL 分數查詢的函式
+     */
+    function autoQuery() {
+        // 設定輸入框值和狀態
+        if (gmailInput) {
+            gmailInput.value = DEFAULT_GMAIL;
+        }
+        if (resultDiv) {
+            resultDiv.className = '';
+            resultDiv.innerHTML = '網頁已自動執行查詢中，請稍候...';
+        }
+        if (submitButton) {
+            submitButton.disabled = true;
+        }
+        
+        const gmail = DEFAULT_GMAIL; // 直接使用預設值
+        
+        // 使用 FormData 建立要傳送的資料
+        const formData = new FormData();
+        formData.append('gmail', gmail); 
+
+        // ------------------------------------
+        // Fetch 查詢邏輯
+        // ------------------------------------
+        fetch(GAS_URL, {
+            method: 'POST',
+            body: formData 
+        })
+        .then(response => {
+            if (!response.ok) {
+                // 如果是 HTTP 錯誤，拋出錯誤訊息
+                throw new Error(`伺服器錯誤 (HTTP ${response.status})`);
+            }
+            return response.json(); 
+        })
+        .then(data => {
+            // 查詢完成，恢復按鈕狀態
+            if (submitButton) submitButton.disabled = false;
+
+            if (data && data.score !== undefined) {
+                const score = data.score;
+                
+                if (score.toString().includes('查無')) {
+                    // 查無紀錄
+                    //resultDiv.className = 'error';
+                    //resultDiv.innerHTML = `GMAIL <strong>${gmail}</strong>：${score}`;
+                    //alert(`~~+++查詢結果：${score}`);
+document.getElementById("sayy").innerText="準備進入測驗……"
+   	   document.getElementById("start-btn").style.display = "block";
+                } else {
+                    // 成功顯示分數
+                    //resultDiv.className = 'success';
+                    //resultDiv.innerHTML = `GMAIL: <strong>${data.gmail}</strong><br>分數: <strong style="font-size: 1.5em;">${score}</strong>`;
+                    //alert(`====GMAIL ${data.gmail} 的分數是：${score}`);
+
+document.getElementById("sayy").innerText ="已有考試成績，無法再測驗。";
+   	   document.getElementById("start-btn").style.display = "none";
+
+
+
+                }
+            } else {
+                //resultDiv.className = 'error';
+                //resultDiv.textContent = '查詢失敗：伺服器回傳資料格式錯誤。';
+                alert('查詢失敗：伺服器回傳資料格式錯誤。');
+            }
+        })
+        .catch(error => {
+            // 發生錯誤
+            if (submitButton) submitButton.disabled = false;
+            console.error('查詢發生錯誤:', error);
+            //resultDiv.className = 'error';
+            //const errorMessage = `查詢發生錯誤： ${error.message}。請檢查 GAS URL 或網路連線。`;
+            //resultDiv.textContent = errorMessage;
+            alert(errorMessage);
+        });
+    }
+
+    // ------------------------------------
+    // 立即執行查詢函式
+    // ------------------------------------
+    autoQuery();
+
+////~~~~~~~~~~~~
 
     // --- 事件監聽 ---
     startBtn.addEventListener('click', startQuiz);
