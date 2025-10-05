@@ -348,7 +348,12 @@
 
             console.log('成績發送至 Apps Script 完成。');
             showModal('成績已成功送出！');
-            window.close();
+
+	//alert("分數："+score);
+	//window.close();
+
+
+
 
         } catch (error) {
             console.error('發送成績至 Apps Script 失敗:', error);
@@ -552,7 +557,7 @@ document.getElementById("sayy").innerText="準備進入測驗……"
                     //resultDiv.innerHTML = `GMAIL: <strong>${data.gmail}</strong><br>分數: <strong style="font-size: 1.5em;">${score}</strong>`;
                     //alert(`====GMAIL ${data.gmail} 的分數是：${score}`);
 
-document.getElementById("sayy").innerText ="已有考試成績，無法再測驗。";
+	   document.getElementById("sayy").innerText ="已有考試成績，無法再測驗。";
    	   document.getElementById("start-btn").style.display = "none";
 
 
