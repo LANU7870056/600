@@ -1,0 +1,32 @@
+
+    <meta charset="UTF-8">
+<p id="gmDisplay"></p>
+<script>
+// 定義全域變數
+var globalGM = null;
+
+// 取得網址參數並存入全域變數
+function extractGMFromURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  globalGM = urlParams.get('gm');  //全域變數
+  localStorage.setItem("GM",globalGM);
+}
+
+//localStorage.setItem("A", "123");   //存入
+//let A = localStorage.getItem("A");  //取出
+//console.log(A); // 顯示 "123"
+
+
+// 執行擷取
+extractGMFromURL();
+
+// 測試輸出
+console.log("全域 gm 參數為：", globalGM);
+
+
+
+  document.getElementById("gmDisplay").textContent = "登入帳號：" + globalGM;
+</script>
+
+
+
