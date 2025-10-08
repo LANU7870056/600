@@ -1,50 +1,146 @@
 <!DOCTYPE html>
-<html>   <meta charset="UTF-8">
+<html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+<meta charset="UTF-8">
 <title>資料輸入表單</title>
 <style>
-  /* 可選：讓表單更好看一點 */
-  body { font-family: Arial, sans-serif; margin: 50px; }
-  form { width: 300px; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
-  label, input, select, button { display: block; margin-bottom: 10px; }
-  input[type="text"], select { width: 100%; padding: 8px; box-sizing: border-box; }
-  button { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+    /* 可選：讓表單更好看一點 */
+    body { font-family: Arial, sans-serif; margin: 0px; }
+    form { width: 70%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+    label, input, select, button { display: block; margin-bottom: 10px; }
+    input[type="text"], input[type="number"], select { width: 70%; padding: 8px; box-sizing: border-box; }
+    button { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+
+.centered-box {
+    display: flex;
+    justify-content: center; /* 水平置中 */
+    align-items: center;     /* 垂直置中 */
+    width: 70%;
+    margin: 0px auto; /* 置中 */
+    background-color: #e0f0ff; /* 淺藍底色 */
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px; /* 上方圓角 */
+    padding: 0px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 可選：加點陰影 */
+    text-align: center; /* 內容置中 */
+  }
+
+
+.centered-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+form#myForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.la {
+  margin: 10px 0;
+font-size:1.5em;
+  text-align: center;
+  width: 250px;
+}
+
+button.la {
+  width: 150px;
+}
+
+
+
+
 </style>
-</head>
-<body>
 
-<form id="myForm" action="https://script.google.com/macros/s/AKfycbzSOzQ3xi9rn_qae353Sc2AmIReBnC35qtsNL1YPsYIqs2ToaBhN_oiL9nusy28g4N4/exec" method="POST">
+<div class="centered-box">
 
-<input type="text" id="backurl" value="https://lanu7870056.github.io/600/order01.htm" name="backurl">
+<form id="myForm"> 
+<h1>電子點名</h1>
+    <input type="hidden" id="backurl" value="https://lanu7870056.github.io/600/order01.htm" name="backurl">
+   
+    <input class="la" type="text" id="gmail"  name="GMAIL" style="background-color: #d3d3d3;" readonly >
 
-
-    
-<label for="gmail">GMAIL 帳號:</label>
-    <input type="text" id="gmail" value="lanutsay@gsm.kh.edu.tw" name="GMAIL" required >
-
-    <label for="classId">班級:</label>
-    <select id="classId" name="班級" required>
+    <label class="la" for="classId">班級:</label>
+    <select class="la" id="classId" name="班級" required>
         <option value="">-- 請選擇班級 --</option>
-        <option value="101" selected>101</option>
+        <option value="101">101</option>
         <option value="102">102</option>
         <option value="103">103</option>
-        </select>
+    </select>
 
-    <label for="seatNum">座號 (1~50):</label>
-    <input type="number" id="seatNum" name="座號" min="1" max="50" value="20" required>
+    <label class="la" for="seatNum">座號 (1~50):</label>
+    <input class="la" type="number" id="seatNum" name="座號" min="1" max="50" value="20" required>
 
-    <button type="submit">送出資料</button>
+    <button class="la" type="submit">送出資料</button>
 </form>
-
-<p id="responseMessage"></p>
+</div>
+<p id="responseMessage" style="margin-top: 20px; font-weight: bold;"></p>
 
 <script>
-// 為了更好的使用者體驗，建議使用 JavaScript 異步提交 (fetch/XMLHttpRequest)
-// 這樣可以在不跳轉頁面的情況下顯示成功或失敗訊息。
-// 不過，如果只需要最簡單的實現，使用 form 的 method="POST" 也可以，
-// 只是伺服器會返回一段 Apps Script 的結果頁面。
+let A = localStorage.getItem("GM");  //取出
+gmail.value=A;
 
-// 如果使用 method="POST" 的簡單方法，請忽略此 <script> 標籤內的內容。
+
+    // ⚠️ 這是您 Apps Script 的 Web App URL，請確認它是否正確
+    const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbysGyVzYeLYlX_hxlff_KoCgXZma1ayMujEl8D4bq0jsPOmM8Gd6p9sofIdzt2my325/exec"; 
+    
+    document.getElementById('myForm').addEventListener('submit', async function(event) {
+        // ⭐️ 阻止瀏覽器執行傳統提交 (關鍵步驟，讓網址欄不變)
+        event.preventDefault(); 
+
+        const form = event.target;
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => { data[key] = value; });
+
+        const responseMessage = document.getElementById('responseMessage');
+        responseMessage.textContent = '資料處理中...';
+        responseMessage.style.color = 'blue';
+
+        try {
+            const response = await fetch(APP_SCRIPT_URL, {
+                method: 'POST',
+                // 將數據轉換為 Apps Script 期望的格式
+                body: new URLSearchParams(data) 
+            });
+
+            if (!response.ok) {
+                throw new Error(`伺服器 HTTP 錯誤: ${response.status}`);
+            }
+
+            // ⭐️ 解析 Apps Script 回傳的 JSON 狀態
+            const result = await response.json(); 
+
+            if (result.status === 'duplicate') {
+                // 🚨 資料重複：在當前頁面彈窗並更新訊息
+                alert("資料重覆"); 
+                responseMessage.textContent = '❌ ' + result.message;
+                responseMessage.style.color = 'red';
+            } else if (result.status === 'success') {
+                // ✅ 資料新增成功
+                alert("資料送出成功！");
+                responseMessage.textContent = '✅ ' + result.message;
+                responseMessage.style.color = 'green';
+                form.reset(); // 清空表單欄位
+            } else {
+                // 處理 Apps Script 回傳的其它錯誤 (如座號範圍錯誤)
+                alert("資料處理錯誤：" + result.message);
+                responseMessage.textContent = '⚠️ ' + result.message;
+                responseMessage.style.color = 'orange';
+            }
+
+        } catch (error) {
+            alert("網路連線或 Apps Script 錯誤！");
+            responseMessage.textContent = '❌ 連線失敗: ' + error.message;
+            responseMessage.style.color = 'red';
+        }
+    });
 </script>
 
 </body>
