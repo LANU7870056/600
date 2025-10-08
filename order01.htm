@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>   <meta charset="UTF-8">
+<head>
+<title>資料輸入表單</title>
+<style>
+  /* 可選：讓表單更好看一點 */
+  body { font-family: Arial, sans-serif; margin: 50px; }
+  form { width: 300px; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
+  label, input, select, button { display: block; margin-bottom: 10px; }
+  input[type="text"], select { width: 100%; padding: 8px; box-sizing: border-box; }
+  button { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<form id="myForm" action="https://script.google.com/macros/s/AKfycbzSOzQ3xi9rn_qae353Sc2AmIReBnC35qtsNL1YPsYIqs2ToaBhN_oiL9nusy28g4N4/exec" method="POST">
+
+<input type="hidden" id="backurl" value="http://192.168.3.17/order/1.htm" name="backurl">
+
+
+    
+<label for="gmail">GMAIL 帳號:</label>
+    <input type="text" id="gmail" value="lanutsay@gsm.kh.edu.tw" name="GMAIL" required >
+
+    <label for="classId">班級:</label>
+    <select id="classId" name="班級" required>
+        <option value="">-- 請選擇班級 --</option>
+        <option value="101" selected>101</option>
+        <option value="102">102</option>
+        <option value="103">103</option>
+        </select>
+
+    <label for="seatNum">座號 (1~50):</label>
+    <input type="number" id="seatNum" name="座號" min="1" max="50" value="20" required>
+
+    <button type="submit">送出資料</button>
+</form>
+
+<p id="responseMessage"></p>
+
+<script>
+// 為了更好的使用者體驗，建議使用 JavaScript 異步提交 (fetch/XMLHttpRequest)
+// 這樣可以在不跳轉頁面的情況下顯示成功或失敗訊息。
+// 不過，如果只需要最簡單的實現，使用 form 的 method="POST" 也可以，
+// 只是伺服器會返回一段 Apps Script 的結果頁面。
+
+// 如果使用 method="POST" 的簡單方法，請忽略此 <script> 標籤內的內容。
+</script>
+
+</body>
+</html>
