@@ -1,0 +1,198 @@
+<meta charset="UTF-8">
+
+<div style="display: flex; justify-content: center; margin-top: 30px;">
+  <div style="background-color: #e0f7ff; border-radius: 15px; padding: 30px; border: 2px solid #99d6ea; width: fit-content;">
+
+<h1 align="center" style="color: blue;">線上點名單</h1>
+
+<form id="submission-form"> 
+  <table style="width:450px;border-style: solid; display: inline-table; margin: 0 auto;" border="0">
+    <tr>
+      <td  style="font-size: 2em;" height="61"  width="109"><b>班級：</b></td>
+      <td height="61">
+        <select name="T1"  style="font-size: 2em;">
+          <option value="101">101</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td  style="font-size: 2em;" height="65"><b>座號：</b></td>
+      <td height="65">
+        <input name="T2" size="4" style="font-size: 2em;" 
+onmouseover="this.oninput=function(){
+  this.value = this.value.replace(/[^0-9]/g,'');
+  if (this.value !== '' && (parseInt(this.value) < 1 || parseInt(this.value) > 50)) {
+    this.value = '';
+  }
+}">
+
+
+      </td>
+    </tr>
+    <tr>
+
+
+      <td colspan="2">
+ <input id="gm" name="gm" size="20" style="font-size: 1.5em;font-weight: 700;background-color: #d3d3d3;color: #4a4a4a;" " readonly>
+
+
+
+      </td>
+    </tr>
+  </table>
+  <p style="text-align: center;">
+    <input style="font-size: 1em;" type="submit" value="傳送" name="B1">
+
+  </p>
+</form>    
+
+<div class="progress-container" id="wa" style="display: none;">
+  <div class="progress-bar-scanner"></div>
+</div>
+
+
+    <div id="response-message" style="margin-top: 15px; font-weight: bold;"></div>
+</div></div>
+
+   
+
+
+
+
+
+<script>
+
+function ab(){
+document.getElementById("wa").style.display = "block";
+}
+
+
+//儲存至DB 工作表1
+
+let A2 = localStorage.getItem("GM");  //取出
+document.getElementById('gm').value = A2;
+
+    // 請將這裡的 URL 替換為您最新的 Apps Script Web App URL
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwZj3EIWy_BbvSZgUEFNSjnAIDMwq3YRcMJ6Th6HqBZ2DIZeyBFZZCCxTdTZmnUYkUJWw/exec';
+    
+    // 透過 ID 抓取表單（確保表單標籤有 id="submission-form"）
+    const form = document.getElementById('submission-form');
+    const responseMessage = document.getElementById('response-message');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault(); // ⬅️ 關鍵：阻止瀏覽器進行傳統頁面跳轉
+document.getElementById("wa").style.display = "block";
+        responseMessage.textContent = '提交中...'; // 顯示提交狀態
+
+        responseMessage.style.color = '#007bff';
+
+
+        const formData = new FormData(form);
+
+        fetch(scriptURL, { 
+            method: 'POST', 
+            body: formData,
+        })
+        .then(response => {
+            // 檢查 HTTP 狀態碼
+            if (!response.ok) {
+                throw new Error(`HTTP Error! Status: ${response.status}`);
+            }
+            return response.json(); // 解析 Apps Script 回傳的 JSON 格式
+        })
+        .then(data => {
+            // 根據 Apps Script 回傳的 JSON 內容判斷
+            if (data.result === 'success') {
+                responseMessage.style.color = 'green';
+                responseMessage.textContent = '儲存成功！'; // ⬅️ 在本頁面顯示成功訊息
+document.getElementById("wa").style.display = "none";
+
+
+                form.reset(); // 清除表單內容
+            } else {
+                // Apps Script 回傳了 JSON 但結果為 error
+                responseMessage.style.color = 'red';
+                responseMessage.textContent = '提交失敗: ' + (data.error || '未知錯誤');
+            }
+        })
+        .catch(error => {
+            // 處理網路錯誤或 JSON 解析錯誤
+            responseMessage.style.color = 'red';
+            // 這裡顯示更精確的錯誤訊息，例如如果您還是在本地運行（CORS 錯誤）
+            responseMessage.textContent = '連線或處理失敗，請檢查網頁是否從伺服器載入。'; 
+            console.error('Fetch Error:', error);
+        });
+    });
+</script>
+
+
+
+
+
+
+
+<style>
+/* 1. 外層容器 - 進度條的「軌道」 (不變) */
+.progress-container {
+  width: 100%;
+  max-width: 600px;
+  height: 25px;
+  background-color: #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 20px auto;
+  position: relative;
+}
+
+/* 2. 進度條本身 (底色) (不變) */
+.progress-bar-scanner {
+  width: 100%;
+  height: 100%;
+  background-color: #4CAF50; /* 整個條子的綠色背景 */
+  position: relative;
+}
+
+/* 3. 黃色光點 (使用 ::after 偽元素) */
+.progress-bar-scanner::after {
+  content: "";
+  display: block;
+  
+  /* 初始大小 */
+  width: 5px; /* 光點的初始寬度，比之前小 */
+  height: 100%; /* 和進度條一樣高 */
+  
+  background-color: #FFD700; /* **黃色** */
+  box-shadow: 0 0 10px 5px #FFD700; /* 黃色發光效果 */
+  
+  position: absolute;
+  top: 0;
+  
+  /* 啟用動畫 */
+  animation: scan-grow-light 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; /* 調整動畫名稱和時間 */
+}
+
+/* 4. 定義 Keyframes 動畫 - 包含大小變化 */
+@keyframes scan-grow-light {
+  0% {
+    left: -5px; /* 從軌道左側外面開始，與初始寬度匹配 */
+    transform: scaleX(1); /* 初始大小 */
+    opacity: 0.8; /* 初始透明度 */
+  }
+  
+  30% { /* 開始變大 */
+    transform: scaleX(2); /* 變為兩倍寬 */
+    opacity: 1; /* 完全不透明 */
+  }
+  
+  70% { /* 達到最大後開始縮小 */
+    transform: scaleX(2); /* 維持最大寬度 */
+    opacity: 1;
+  }
+
+  100% {
+    left: calc(100% + 5px); /* 移動到最右側外面 */
+    transform: scaleX(1); /* 縮回初始大小 */
+    opacity: 0.8; /* 結束時透明度稍降 */
+  }
+}
+</style>
