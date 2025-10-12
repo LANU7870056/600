@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 
+
     <style>
         * {
             margin: 0;
@@ -268,7 +269,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </head>
 <body>
     <div class="container">
-        <h1>Google登入訊息_01</h1>
+        <h1>Google登入訊息_03</h1>
         <p class="subtitle clickable" id="gmailSubtitle"></p>
         
         <div class="login-section">
@@ -282,11 +283,14 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
         </div>
         
-<div class="a2" style="display:  none; justify-content: center;">
+<div id="a2" class="a2" style="display:  none; justify-content: center;">
   <button id="goto2" class="btn btn-primary">
     <span class="icon">📧</span>進入系統
   </button>
 </div>
+
+
+
 
         <div id="statusMessage" class="status"></div>
         
@@ -366,7 +370,10 @@ var go2 = urlParams.get('go');
             //document.getElementById('userLocale').textContent = responsePayload.locale || '未设置';
             //document.getElementById('userDomain').textContent = responsePayload.hd || 'gmail.com';
             localStorage.setItem("GM", responsePayload.email);//全域變數
-document.querySelector('.a2').style.display = 'flex';
+
+document.getElementById('a2').style.display='flex';
+
+
 
 
             // 邮箱验证状态
@@ -380,7 +387,7 @@ document.querySelector('.a2').style.display = 'flex';
             // 显示用户信息区域
             document.getElementById('userInfo').classList.add('active');
             localStorage.setItem("GM",responsePayload.email);//全域變數
-document.querySelector('.a2').style.display = 'flex';
+document.getElementById('a2').style.display='flex';
 
             // 显示成功消息
             showStatus(`成功登录！欢迎回到您的Gmail账户：${responsePayload.email}`, 'success');
@@ -472,7 +479,9 @@ document.querySelector('.a2').style.display = 'flex';
                 currentUserEmail = userInfo.email;
 //alert(currentUserEmail);
 	localStorage.setItem("GM",currentUserEmail);//全域變數
-document.querySelector('.a2').style.display = 'flex';
+
+document.getElementById('a2').style.display='flex';
+
                 showStatus('檢測目前登錄帳號，可重新登錄查看最新訊息', 'info');
             }
         };
