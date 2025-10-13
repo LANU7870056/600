@@ -8,7 +8,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 2px;
         }
    .container {
             background-color: #0088FF;
@@ -16,20 +16,19 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
             width: 90%;
             max-width: 500px;
-            padding: 40px 30px;
+            padding: 4px 3px;
             text-align: center;
             animation: fadeIn 0.5s ease-in;
         }
 </style>
 
 <div class="container">
-<div style="display: flex; justify-content: center; margin-top: 3px;">
-<div style="background-color:#0088FF; border-radius: 15px; padding: 3px; border: 2px solid #0088FF; width: fit-content;">
-<h1 align="center" style="color: blue;">線上點名單</h1>
+<div style="background-color:#0088FF; border-radius: 15px; padding: 0px; border: 1px solid #0088FF; width: fit-content;">
+<h1 align="center" style="color: yellow;">線上點名單</h1>
 <form id="submission-form"> 
-  <table style="width:80%;border-style: solid; display: inline-table; margin: 0 auto;" border="0">
+  <table style="width:50%;border-style: solid; display: inline-table; margin: 0 auto;" border="0">
     <tr>
-      <td  style="font-size: 2em;color: yellow;" height="61"  width="109"><b>班級：</b></td>
+      <td  style="font-size: 2em;color: yellow;" height="61"  ><b>班級：</b></td>
       <td height="61">
         <select name="T1"  style="font-size: 2em;">
           <option value="0">請選擇</option>
@@ -68,7 +67,7 @@ onmouseover="this.oninput=function(){
 
       <td colspan="2">
 
-<input id="gm" name="gm" size="25" style="font-size: 1.5em; font-weight: 700; background-color: #d3d3d3; color: #f0f0f0;" readonly>
+<input id="gm" name="gm" size="18" style="font-size: 1.5em; font-weight: 700; background-color: #d3d3d3; color: #f0f0f0;" readonly>
 
 
 
@@ -159,8 +158,8 @@ document.getElementById("wa").style.display = "block";
         .then(data => {
             // 根據 Apps Script 回傳的 JSON 內容判斷
             if (data.result === 'success') {
-                responseMessage.style.color = 'green';
-                responseMessage.textContent = '儲存成功！可關閉視窗'; // ⬅️ 在本頁面顯示成功訊息
+                responseMessage.style.color = 'yellow';
+                responseMessage.textContent = '傳送成功！可關閉視窗'; // ⬅️ 在本頁面顯示成功訊息
 document.getElementById("wa").style.display = "none";
 
 
