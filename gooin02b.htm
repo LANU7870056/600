@@ -11,7 +11,9 @@
       <td  style="font-size: 2em;" height="61"  width="109"><b>班級：</b></td>
       <td height="61">
         <select name="T1"  style="font-size: 2em;">
+          <option value="0">請選擇</option>
           <option value="101">101</option>
+          <option value="102">102</option>
         </select>
       </td>
     </tr>
@@ -33,7 +35,7 @@ onmouseover="this.oninput=function(){
 
 
       <td colspan="2">
- <input id="gm" name="gm" size="20" style="font-size: 1.5em;font-weight: 700;background-color: #d3d3d3;color: #4a4a4a;" " readonly>
+ <input id="gm" name="gm" size="25" style="font-size: 1.5em;font-weight: 700;background-color: #d3d3d3;color: #f0f0f0;" " readonly>
 
 
 
@@ -41,7 +43,7 @@ onmouseover="this.oninput=function(){
     </tr>
   </table>
   <p style="text-align: center;">
-    <input style="font-size: 1em;" type="submit" value="傳送" name="B1">
+    <input style="font-size: 2em;" type="submit" value="傳送" name="B1">
 
   </p>
 </form>    
@@ -66,8 +68,8 @@ function ab(){
 document.getElementById("wa").style.display = "block";
 }
 
-
 //儲存至DB 工作表1
+
 
 let A2 = localStorage.getItem("GM");  //取出
 document.getElementById('gm').value = A2;
@@ -80,13 +82,25 @@ document.getElementById('gm').value = A2;
     const responseMessage = document.getElementById('response-message');
 
     form.addEventListener('submit', e => {
+
+ var t1 = document.getElementsByName("T1")[0].value;
+  var t2 = document.getElementsByName("T2")[0].value.trim();
+if (t1 === "0" ) {
+    alert("請選擇「班級」 ");
+    return false; // 阻止表單送出或後續動作
+  }
+
+if (t2 === "") {
+    alert("請輸入「座號」");
+    return false; // 阻止表單送出或後續動作
+  }
+
         e.preventDefault(); // ⬅️ 關鍵：阻止瀏覽器進行傳統頁面跳轉
 document.getElementById("wa").style.display = "block";
         responseMessage.textContent = '提交中...'; // 顯示提交狀態
 
         responseMessage.style.color = '#007bff';
-
-
+        responseMessage.style.fontSize = '1.5em';
         const formData = new FormData(form);
 
         fetch(scriptURL, { 
