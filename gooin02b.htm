@@ -14,6 +14,15 @@
           <option value="0">請選擇</option>
           <option value="101">101</option>
           <option value="102">102</option>
+          <option value="103">103</option>
+          <option value="104">104</option>
+          <option value="105">105</option>
+          <option value="108">108</option>
+          <option value="109">109</option>
+          <option value="110">110</option>
+          <option value="111">111</option>
+          <option value="113">113</option>
+          <option value="114">114</option>
         </select>
       </td>
     </tr>
@@ -35,7 +44,8 @@ onmouseover="this.oninput=function(){
 
 
       <td colspan="2">
- <input id="gm" name="gm" size="25" style="font-size: 1.5em;font-weight: 700;background-color: #d3d3d3;color: #f0f0f0;" " readonly>
+
+<input id="gm" name="gm" size="25" style="font-size: 1.5em; font-weight: 700; background-color: #d3d3d3; color: #f0f0f0;" readonly>
 
 
 
@@ -54,9 +64,24 @@ onmouseover="this.oninput=function(){
 
 
     <div id="response-message" style="margin-top: 15px; font-weight: bold;"></div>
-</div></div>
 
-   
+
+<script>
+window.onload = function() {
+  let A2 = localStorage.getItem("GM");
+  //console.log("GM =", A2);  // 在開發者工具中查看值
+  //alert("GM 值為：" + A2);  // 顯示目前的值
+
+
+if (!A2 || A2 == 'null' || A2.trim().length === 0) {      
+        window.location.href = "gooin02.HTM";
+      } else {
+        document.getElementById('gm').value = A2;
+      }
+    };
+
+</script>
+
 
 
 
@@ -64,15 +89,9 @@ onmouseover="this.oninput=function(){
 
 <script>
 
-function ab(){
-document.getElementById("wa").style.display = "block";
-}
 
 //儲存至DB 工作表1
 
-
-let A2 = localStorage.getItem("GM");  //取出
-document.getElementById('gm').value = A2;
 
     // 請將這裡的 URL 替換為您最新的 Apps Script Web App URL
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwZj3EIWy_BbvSZgUEFNSjnAIDMwq3YRcMJ6Th6HqBZ2DIZeyBFZZCCxTdTZmnUYkUJWw/exec';
