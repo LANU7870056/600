@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>電腦即測即評系統</title>
+<script>
+window.onload = function() {
+  let A2 = localStorage.getItem("GM");
+  console.log("GM =", A2);  // 在開發者工具中查看值
+  //alert("GM 值為：" + A2);  // 顯示目前的值
+
+
+if (!A2 || A2 == 'null' || A2.trim().length === 0) {      
+       window.location.href = "exam1.htm";
+      } else {
+        document.getElementById('gm').value = A2;
+      }
+    };
+
+</script>
+
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 0px; }
+        
+        /* 題號按鈕樣式 */
+        #question-nav { margin-bottom: 25px; display: flex; flex-wrap: wrap; gap: 8px; }
+        .nav-button {
+            padding: 0px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            min-width: 30px;
+            text-align: center;
+            font-weight: bold;
+            transition: background-color 0.2s, color 0.2s, border-width 0.1s;
+        }
+        /* 按钮初始状态：淺藍色 (未作答) */
+        .nav-button.unanswered {
+            background-color: #a0c4ff;
+            color: #1a1a1a;
+        }
+        /* 按钮作答後狀態：白色 (已作答) */
+        .nav-button.answered {
+            background-color: #ffffff;
+            color: #000000;
+            border-color: #007bff;
+        }
+        /* 當前題目高亮顯示 */
+        .nav-button.current-q {
+            border-width: 3px;
+            border-color: #ff5722;
+        }
+
+        .question-card { font-size:20px;border: 1px solid #ddd; padding: 15px; border-radius: 8px; min-height: 150px; }
+        .option-label { font-size:20px;display: block; margin: 10px 0; cursor: pointer; padding: 5px; border-radius: 3px; }
+        .option-label:hover { background-color: #f0f0f0; }
+        button#show-submit-btn {  font-size:20px;padding: 10px 20px; cursor: pointer; margin-top: 30px; display: none; }
+
+        #user-info, #result { margin-top: 10px; padding: 15px; border: 2px dashed #007bff; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <h1>電腦即測即評系統</h1><span  style="display: none;" id="question-count">10</span>
+    
+    <div id="question-nav">
+        <p>隨機選題製作中…</p>
+    </div>
+
+    <div id="quiz-container">
+        <p>正在加載題目，請稍候...</p>
+    </div>
+<div class="progress-container" id="wa" style="display: block;">
+  <div class="progress-bar-scanner"></div>
+</div>
+
+    <button  id="show-submit-btn" onclick="showSubmitForm()">完成作答，提交成績</button>
+
+    <div id="user-info" style="display: none;"> 
+        <h2>作答完畢</h2>
+        <input style="display: none;" type="email" id="email" required  style="width: 250px;" readonly>
+        <br>
+        <button style="font-size:20px;" id="submit-quiz-btn" onclick="submitQuiz()">查看成績</button>
+    </div>
+
+    <div id="result" style="display: none;">
+    </div>
+
+    <script>
+ let A2 = localStorage.getItem("GM");
+document.getElementById('email').value = A2;
+const NUM_QUESTIONS = 20; 
+
+        // *** 請將您的 Apps Script Web App URL 貼到這裡 ***
+        const GS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzr3GI3uu-SGRRdsu_u8b8eCHn-qpZnVic6BSCitUqZK6U6OyhLkz5-W9iKgl37-PE/exec'; 
+        
+
+        document.getElementById('question-count').textContent = NUM_QUESTIONS;
+        let questionsData = []; 
+        let userAnswers = {};   
+        let currentQuestionIndex = 0; 
+
+        /**
+         * 1. 獲取考題 - 最終版本：使用 FormData
+         */
+        async function fetchQuestions() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '考題製作中，請稍等……';
+
+            const formData = new FormData(); // 🌟 關鍵：使用 FormData
+            formData.append('numQuestions', NUM_QUESTIONS); 
+
+            try {
+                const response = await fetch(GS_WEB_APP_URL + '?action=getQuestions', {
+                    method: 'POST',
+                    body: formData // 發送 FormData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    questionsData = result.data;
+                    initializeQuiz();
+                } else {
+                    container.innerHTML = `<p style="color: red;">加載題目失敗: ${result.error}</p>`;
+                }
+            } catch (error) {
+                container.innerHTML = `<p style="color: red;">網絡請求錯誤: ${error.message}</p>`;
+            }
+        }
+
+        /**
+         * 2. 初始化測驗界面 (生成題號按鈕和顯示第一題)
+         */
+        function initializeQuiz() {
+	document.getElementById("wa").style.display = "none";
+            const navContainer = document.getElementById('question-nav');
+            navContainer.innerHTML = '';
+            
+            for (let i = 0; i < NUM_QUESTIONS; i++) {
+                userAnswers['q' + i] = null; 
+
+                const button = document.createElement('div');
+                button.textContent = i + 1;
+                button.className = 'nav-button unanswered';
+                button.id = `nav-btn-${i}`;
+                button.onclick = () => showQuestion(i);
+                navContainer.appendChild(button);
+            }
+
+            // 顯示第一題
+            showQuestion(0);
+            document.getElementById('show-submit-btn').style.display = 'block';
+        }
+
+        /**
+         * 3. 顯示指定索引的題目
+         */
+        function showQuestion(index) {
+            if (index < 0 || index >= NUM_QUESTIONS) return;
+            currentQuestionIndex = index;
+            const q = questionsData[index];
+            const container = document.getElementById('quiz-container');
+
+            // 渲染單題卡片
+            container.innerHTML = `
+                <div class="question-card">
+                    <h3>${index + 1}. ${q.item}</h3>
+                    <div id="options-for-q${index}">
+                        ${q.options.map((opt, optIndex) => `
+                            <label class="option-label">
+                                <input type="radio" 
+                                       name="q${index}" 
+                                       value="${opt.key}" 
+                                       data-is-correct="${opt.isCorrect}" 
+                                       onchange="recordAnswer(${index}, '${opt.key}')"
+                                       ${userAnswers['q' + index] === opt.key ? 'checked' : ''}>
+                                ${opt.text}
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // 更新導航按鈕的高亮狀態
+            document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('current-q'));
+            document.getElementById(`nav-btn-${index}`).classList.add('current-q');
+        }
+
+        /**
+         * 4. 記錄作答並更新按鈕狀態，自動跳下一題
+         */
+        function recordAnswer(index, selectedKey) {
+            userAnswers['q' + index] = selectedKey;
+            
+            const btn = document.getElementById(`nav-btn-${index}`);
+            // 更新按鈕樣式
+            btn.classList.remove('unanswered');
+            btn.classList.add('answered');
+            
+            // 更新按鈕文本
+            btn.textContent = `${index + 1}. ${selectedKey}`; 
+
+            // 自動跳下一題
+            if (index < NUM_QUESTIONS - 1) {
+                setTimeout(() => showQuestion(index + 1), 100); 
+            }
+        }
+
+        /**
+         * 5. 顯示使用者提交表單
+         */
+        function showSubmitForm() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('show-submit-btn').style.display = 'none';
+            document.getElementById('question-nav').style.display = 'none';
+            document.getElementById('user-info').style.display = 'block';
+        }
+
+        /**
+         * 6. 提交成績 - 最終版本：使用 FormData
+         */
+        async function submitQuiz() {
+            const email = document.getElementById('email').value.trim();
+            if (!email) {
+                alert('請填寫您的 Gmail 郵箱！');
+                return;
+            }
+
+            // --- 計算成績 ---
+            let totalCorrect = 0;
+            questionsData.forEach((q, index) => {
+                const selectedKey = userAnswers['q' + index];
+                const correctOption = q.options.find(opt => opt.isCorrect);
+
+                if (selectedKey && correctOption && selectedKey === correctOption.key) {
+                    totalCorrect++;
+                }
+            });
+            const score = Math.round((totalCorrect / NUM_QUESTIONS) * 100);
+
+            // --- 準備 UI ---
+            document.getElementById('submit-quiz-btn').disabled = true;
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+	wa.style.display = 'block';
+            resultDiv.innerHTML = '<p>正在提交成績...</p>';
+
+            // 🌟 關鍵：使用 FormData 構造信箱和成績數據
+            const formData = new FormData();
+            formData.append('email', email); // 鍵名 'email'
+            formData.append('score', score); // 鍵名 'score'
+
+            // 儲存成績到 Google Sheets
+            try {
+                const response = await fetch(GS_WEB_APP_URL + '?action=saveScore', {
+                    method: 'POST',
+                    body: formData // 發送 FormData 對象
+                });
+
+                const saveResult = await response.json();
+
+                // --- 顯示結果 ---
+                if (saveResult.success) {
+	wa.style.display = 'none';
+                    resultDiv.innerHTML = `
+                        <h2>測驗結果</h2>
+                        <p>信箱: **${email}**</p>
+                        <p>答對題數: **${totalCorrect}** / ${NUM_QUESTIONS}</p>
+                        <p>您的得分: **${score}** 分</p>
+                        <p style="color: green;">✅ 成績成功送出</p>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<p style="color: red;">❌ 成績記錄失敗: ${saveResult.error}</p>`;
+                }
+                document.getElementById('user-info').style.display = 'none';
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">網絡請求錯誤，成績未記錄: ${error.message}</p>`;
+                document.getElementById('submit-quiz-btn').disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchQuestions);
+    </script>
+
+<style>
+/* 1. 外層容器 - 進度條的「軌道」 (不變) */
+.progress-container {
+  width: 100%;
+  max-width: 600px;
+  height: 25px;
+  background-color: #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 20px auto;
+  position: relative;
+}
+
+/* 2. 進度條本身 (底色) (不變) */
+.progress-bar-scanner {
+  width: 100%;
+  height: 100%;
+  background-color: #4CAF50; /* 整個條子的綠色背景 */
+  position: relative;
+}
+
+/* 3. 黃色光點 (使用 ::after 偽元素) */
+.progress-bar-scanner::after {
+  content: "";
+  display: block;
+  
+  /* 初始大小 */
+  width: 5px; /* 光點的初始寬度，比之前小 */
+  height: 100%; /* 和進度條一樣高 */
+  
+  background-color: #FFD700; /* **黃色** */
+  box-shadow: 0 0 10px 5px #FFD700; /* 黃色發光效果 */
+  
+  position: absolute;
+  top: 0;
+  
+  /* 啟用動畫 */
+  animation: scan-grow-light 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; /* 調整動畫名稱和時間 */
+}
+
+/* 4. 定義 Keyframes 動畫 - 包含大小變化 */
+@keyframes scan-grow-light {
+  0% {
+    left: -5px; /* 從軌道左側外面開始，與初始寬度匹配 */
+    transform: scaleX(1); /* 初始大小 */
+    opacity: 0.8; /* 初始透明度 */
+  }
+  
+  30% { /* 開始變大 */
+    transform: scaleX(2); /* 變為兩倍寬 */
+    opacity: 1; /* 完全不透明 */
+  }
+  
+  70% { /* 達到最大後開始縮小 */
+    transform: scaleX(2); /* 維持最大寬度 */
+    opacity: 1;
+  }
+
+  100% {
+    left: calc(100% + 5px); /* 移動到最右側外面 */
+    transform: scaleX(1); /* 縮回初始大小 */
+    opacity: 0.8; /* 結束時透明度稍降 */
+  }
+}
+</style>
+
+</body>
+</html>
