@@ -20,9 +20,9 @@ if (!A2 || A2 == 'null' || A2.trim().length === 0) {
 
 </script>
 
-    <style>
+<style>
         body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 0px; }
-        
+        .cen {  text-align: center; /* 讓 .cen 裡面的文字、圖片等行內內容水平置中 */}
         /* 題號按鈕樣式 */
         #question-nav { margin-bottom: 25px; display: flex; flex-wrap: wrap; gap: 8px; }
         .nav-button {
@@ -52,20 +52,41 @@ if (!A2 || A2 == 'null' || A2.trim().length === 0) {
             border-color: #ff5722;
         }
 
-        .question-card { font-size:20px;border: 1px solid #ddd; padding: 15px; border-radius: 8px; min-height: 150px; }
-        .option-label { font-size:20px;display: block; margin: 10px 0; cursor: pointer; padding: 5px; border-radius: 3px; }
-        .option-label:hover { background-color: #f0f0f0; }
-        button#show-submit-btn {  font-size:20px;padding: 10px 20px; cursor: pointer; margin-top: 30px; display: none; }
+      .question-card { text-align: left;font-size:20px;border: 1px solid #ddd; padding: 5px; border-radius: 8px; min-height: 120px; }
+      .option-label {font-size:25px;display: block; margin: 10px 0; cursor: pointer; padding: 5px; border-radius: 3px; }
+      .option-label:hover { background-color: #f0f0f0; }
+      button#show-submit-btn {  font-size:20px;padding: 10px 20px; cursor: pointer; margin-top: 30px; display: none; }
 
         #user-info, #result { margin-top: 10px; padding: 15px; border: 2px dashed #007bff; border-radius: 5px; }
+
+.button-container {
+    /* 讓容器內的行內元素（包括按鈕）水平置中 */
+    text-align: center; 
+}
+
+#show-submit-btn {
+    /* 設定深紅色背景 */
+    background-color: darkred; 
+    /* 設定文字顏色為白色，增加可讀性 */
+    color: white;             
+    /* 移除邊框，讓樣式更乾淨 */
+    border: none;             
+    /* 增加內邊距，讓按鈕看起來大一點 */
+    padding: 10px 20px;       
+    /* 增加圓角，讓按鈕更美觀 */
+    border-radius: 5px;       
+    /* 讓滑鼠移過去時有提示效果 */
+    cursor: pointer;          
+}
+
     </style>
 </head>
 <body>
-
-    <h1>電腦即測即評系統</h1><span  style="display: none;" id="question-count">10</span>
+ <div class="cen">
+    <h1>電腦即測即評系統</h1><span style="display: none;" id="question-count">10</span>
     
     <div id="question-nav">
-        <p>隨機選題製作中…</p>
+        隨機選題製作中…
     </div>
 
     <div id="quiz-container">
@@ -75,7 +96,10 @@ if (!A2 || A2 == 'null' || A2.trim().length === 0) {
   <div class="progress-bar-scanner"></div>
 </div>
 
-    <button  id="show-submit-btn" onclick="showSubmitForm()">完成作答，提交成績</button>
+<div class="button-container">
+    <button id="show-submit-btn" onclick="showSubmitForm()">完成作答，提交成績</button>
+</div>
+
 
     <div id="user-info" style="display: none;"> 
         <h2>作答完畢</h2>
@@ -86,6 +110,8 @@ if (!A2 || A2 == 'null' || A2.trim().length === 0) {
 
     <div id="result" style="display: none;">
     </div>
+
+</div>
 
     <script>
  let A2 = localStorage.getItem("GM");
