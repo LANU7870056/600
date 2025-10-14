@@ -12,7 +12,7 @@ window.onload = function() {
 
 
 if (!A2 || A2 == 'null' || A2.trim().length === 0) {      
-       //window.location.href = "exam1.htm";
+       window.location.href = "exam1.htm";
       } else {
         document.getElementById('gm').value = A2;
       }
@@ -53,7 +53,7 @@ if (!A2 || A2 == 'null' || A2.trim().length === 0) {
         }
 
       .question-card { text-align: left;font-size:20px;border: 1px solid #ddd; padding: 5px; border-radius: 8px; min-height: 120px; }
-      .option-label {font-size:25px;display: block; margin: 10px 0; cursor: pointer; padding: 5px; border-radius: 3px; }
+      .option-label {font-size:25px;display: block; margin: 5px 0; cursor: pointer; padding: 1px; border-radius: 3px; }
       .option-label:hover { background-color: #f0f0f0; }
       button#show-submit-btn {  font-size:20px;padding: 10px 20px; cursor: pointer; margin-top: 30px; display: none; }
 
@@ -217,22 +217,23 @@ const NUM_QUESTIONS = 20;
         /**
          * 4. 記錄作答並更新按鈕狀態，自動跳下一題
          */
-        function recordAnswer(index, selectedKey) {
-            userAnswers['q' + index] = selectedKey;
-            
-            const btn = document.getElementById(`nav-btn-${index}`);
-            // 更新按鈕樣式
-            btn.classList.remove('unanswered');
-            btn.classList.add('answered');
-            
-            // 更新按鈕文本
-            btn.textContent = `${index + 1}. ${selectedKey}`; 
-
-            // 自動跳下一題
-            if (index < NUM_QUESTIONS - 1) {
-                setTimeout(() => showQuestion(index + 1), 100); 
-            }
-        }
+// 4. 記錄作答並更新按鈕狀態，自動跳下一題
+function recordAnswer(index, selectedKey) {
+    userAnswers['q' + index] = selectedKey;
+    
+    const btn = document.getElementById(`nav-btn-${index}`);
+    // 1. 更新按鈕樣式：淺藍色 (unanswered) -> 白色 (answered)
+    btn.classList.remove('unanswered');
+    btn.classList.add('answered');
+    
+    // 2. 更新按鈕文本：只顯示題號，不加上作答選項
+    btn.textContent = index + 1; // 顯示數字題號，例如 1, 2, 3...
+    
+    // 自動跳下一題
+    if (index < NUM_QUESTIONS - 1) {
+        setTimeout(() => showQuestion(index + 1), 100); 
+    }
+}
 
         /**
          * 5. 顯示使用者提交表單
