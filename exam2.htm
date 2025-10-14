@@ -293,9 +293,9 @@ function recordAnswer(index, selectedKey) {
 	wa.style.display = 'none';
                     resultDiv.innerHTML = `
                         <h2>測驗結果</h2>
-                        <p>信箱: **${email}**</p>
-                        <p>答對題數: **${totalCorrect}** / ${NUM_QUESTIONS}</p>
-                        <p>您的得分: **${score}** 分</p>
+                        <h2><p>登入帳號: ${email}</p>
+                        <p>答對題數: ${totalCorrect} / ${NUM_QUESTIONS}</p>
+                        <p>您的得分: ${score} 分</p></h2>
                         <p style="color: green;">✅ 成績成功送出</p>
                     `;
                 } else {
