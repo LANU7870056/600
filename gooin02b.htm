@@ -75,6 +75,8 @@ onmouseover="this.oninput=function(){
       <td colspan="2">
 
 <input id="gm" name="gm" size="18" style="font-size: 1.5em; font-weight: 700; background-color: #d3d3d3; color: #f0f0f0;" readonly>
+<input id="dn" name="dn" size="18" style="font-size: 1.5em; font-weight: 700; background-color: #d3d3d3; color: #f0f0f0;" readonly>
+
 
 
 
@@ -98,6 +100,8 @@ onmouseover="this.oninput=function(){
 <script>
 window.onload = function() {
   let A2 = localStorage.getItem("GM");
+  let ip = localStorage.getItem("ip");
+  let dn = localStorage.getItem("dn");
   console.log("GM =", A2);  // 在開發者工具中查看值
   //alert("GM 值為：" + A2);  // 顯示目前的值
 
@@ -106,6 +110,8 @@ if (!A2 || A2 == 'null' || A2.trim().length === 0) {
        window.location.href = "gooin02.htm";
       } else {
         document.getElementById('gm').value = A2;
+        document.getElementById('dn').value = dn;
+        document.getElementById('ip').value = ip;
       }
     };
 
