@@ -25,7 +25,7 @@
 
 <div class="container">
 
-<div style="background-color:#0088FF; border-radius: 15px; padding: 0px; border: 1px solid #0088FF; ">
+<div id="bk2" style="background-color:#0088FF; border-radius: 15px; padding: 0px; border: 1px solid #0088FF; ">
 
 <h1 style="width:100%;color: yellow; text-align: center; margin: 0 auto;">線上點名單</h1>
 
@@ -174,8 +174,12 @@ if (t2 === "") {
             if (data.result === 'success') {
                 responseMessage.style.color = 'yellow';
                 responseMessage.textContent = '點名資料傳送成功！可關閉視窗'; // ⬅️ 在本頁面顯示成功訊息
-	 	document.getElementById("wa").style.display = "none";
+	 
+	document.getElementById("wa").style.display = "none";
 
+	document.getElementById("bk2").style.backgroundColor = '#749B00';   
+document.getElementById("gm").style.display = "none";
+document.getElementById("dn").style.display = "none";
 
                 form.reset(); // 清除表單內容
             } else {
