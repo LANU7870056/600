@@ -216,10 +216,10 @@
         const studentId = studentIdInput.value.trim();
         const studentName = studentNameInput.value.trim();
 
-        //if (!studentId || !studentName) {
+        if (!studentId || !studentName) {
             showModal('請輸入 Gmail 和班級座號！');
             return;
-        //}
+        }
 
         quizStudentInfoEl.textContent = `${studentId} ${studentName}`;
 
