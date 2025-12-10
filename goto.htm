@@ -4,19 +4,51 @@
 <head>
 
 
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>期中考專案網頁</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="main-container">
+        <header>
+            <h1>資訊科技期中考</h1>
+           
+        </header>
+
+        <section class="content">
+<div class="df2">
+<button2 onclick="shutdownChrome()">【關閉系統/關閉視窗】</button2>
+</div>
+
+
+<BR><BR><BR>            <BR><BR><BR>
+       <div class="df">
+                       <button onclick="openFullscreenWindow('2026exam1.htm')">【進入測驗】</button>
+  </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2025 期中考網頁製作</p>
+        </footer>
+    </div>
+
+</body>
+</html>
+
+
 <script>
 localStorage.setItem("GM",null);
 localStorage.setItem("googleUserInfo",null);
 </script>
 
-<div class="df2">
-<button2 onclick="shutdownChrome()">關閉系統</button2>
-</div>
 
-<div class="df">
-<BR><BR><BR><BR>
-<button onclick="openFullscreenWindow('2026exam1.htm')">【進入測驗】</button>
-</div>
+
 
 
 <!DOCTYPE html>
@@ -33,13 +65,28 @@ localStorage.setItem("googleUserInfo",null);
 }
 
 
+.df2 button2 {
+    /* 設定按鈕內的文字顏色為藍色 (保持不變) */
+    color: red; 
+    
+    /* 👇 將背景顏色設定為淺黃色 (LightYellow) 👇 */
+    background-color: #FFFFE0; /* 淺黃色的 Hex 色碼 */
+    
+    //border: 2px solid blue;    /* 藍色邊框 (保持不變) */
+    padding: 10px 20px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
     .df {
         display: flex;           /* 啟用 Flexbox 排版 */
         justify-content: center; /* 水平置中 */
         align-items: center;     /* 垂直置中 */
         flex-direction: column;  /* 讓按鈕垂直排列 (因為您原本中間有 BR 換行) */
         font-size: 20px;         /* 字體大小 20px */
-        
+	color: blue;
+        fontcolor: blue;
+
         /* 如果希望這區塊佔滿整個畫面高度來置中，請取消下面這行的註解 */
         /* height: 100vh; */     
         
@@ -48,6 +95,20 @@ localStorage.setItem("googleUserInfo",null);
     }
 
     /* 稍微美化一下按鈕 (選用) */
+
+.df button {
+    /* 設定按鈕內的文字顏色為藍色 (保持不變) */
+    color: blue; 
+    
+    /* 👇 將背景顏色設定為淺黃色 (LightYellow) 👇 */
+    background-color: #FFFFE0; /* 淺黃色的 Hex 色碼 */
+    
+    border: 4px solid blue;    /* 藍色邊框 (保持不變) */
+    padding: 10px 20px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
 
 button2 {
         font-size: 20px; /* 讓按鈕文字也繼承大小 */
@@ -66,7 +127,7 @@ button2 {
 <script>
 function shutdownChrome() {
 
-   alert("按下Ctrl+w關閉視窗");
+//alert("按下Ctrl+w關閉視窗");
 window.opener=null;
 window.close();
     window.open('','_self').close();
@@ -98,3 +159,46 @@ function openFullscreenWindow(url) {
 // openFullscreenWindow('123.HTM');
 
 </script>
+
+
+<style>
+/* 設定網頁整體的背景顏色為淺藍色 */
+body {
+    background-color: #add8e6; /* 淺藍色 (LightBlue) */
+    font-family: "微軟正黑體", sans-serif; /* 設定字體 */
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center; /* 讓內容區塊置中 */
+}
+
+/* 設定主要內容區塊的樣式 (白底，讓文字更清楚) */
+.main-container {
+    background-color: #ffffff; /* 白底 */
+    width: 800px;             /* 寬度設定 */
+    padding: 40px;            /* 內距 */
+    border-radius: 10px;      /* 圓角效果 */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* 陰影效果，增加立體感 */
+}
+
+/* 標題樣式 */
+header {
+    border-bottom: 2px solid #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+/* 頁尾樣式 */
+footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 0.8em;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+</style>
