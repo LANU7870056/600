@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta property="og:title" content="電腦即測即評測驗">
+  <meta property="og:description" content="電腦即測即評測驗">
+  <meta property="og:image" content="goin02.png">
+  <meta property="og:url" content="https://lanu7870056.github.io/600/gooin02.htm">
+  <meta property="og:type" content="website">
+
+
+<link rel="icon" href="goin02.png" type="image/png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>電腦即測即評測驗</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+
+<script>
+localStorage.setItem("GM",null);
+localStorage.setItem("googleUserInfo",null);
+
+function abc()
+{
+ var statusElement = document.getElementById('userInfo');
+
+//statusElement.innerHTML = '===';
+}
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("goto2").addEventListener("click", function() {
+    window.location.href = "2026exam2.htm";
+  });
+});
+
+</script>
+
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #4285f4 0%, #ea4335 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px 30px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 700;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        
+        .subtitle:hover {
+            background: #f0f7ff;
+            color: #4285f4;
+            transform: translateY(-2px);
+        }
+        
+        .login-section {
+            margin: 30px 0;
+        }
+        
+        .user-info {
+            display: none;
+            text-align: left;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 25px;
+            border: 1px solid #e0e0e0;
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-info.active {
+            display: block;
+        }
+        
+        .avatar-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid #4285f4;
+            box-shadow: 0 5px 15px rgba(66, 133, 244, 0.3);
+        }
+        
+        .welcome-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-top: 10px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .label {
+            font-weight: 600;
+            color: #555;
+            min-width: 120px;
+        }
+        
+        .value {
+            color: #333;
+            text-align: right;
+            word-break: break-all;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge.verified {
+            background: #e6f4ea;
+            color: #137333;
+        }
+        
+        .badge.not-verified {
+            background: #fce8e6;
+            color: #c5221f;
+        }
+        
+        .actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #4285f4;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #3367d6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(66, 133, 244, 0.4);
+        }
+        
+        .btn-danger {
+            background: #ea4335;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #d33426;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(234, 67, 53, 0.4);
+        }
+        
+        .btn-success {
+            background: #34a853;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #2e8b47;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 168, 83, 0.4);
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .status.success {
+            background: #e6f4ea;
+            color: #137333;
+            display: block;
+        }
+        
+        .status.info {
+            background: #e8f0fe;
+            color: #1a73e8;
+            display: block;
+        }
+        
+        .g_id_signin {
+            margin: 0 auto;
+            display: inline-block;
+        }
+        
+        .note {
+            margin-top: 25px;
+            font-size: 20px;
+            color: #f00;
+            line-height: 1.5;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .icon {
+            font-size: 18px;
+        }
+        
+        .clickable {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .clickable:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>電腦即測即評測驗</h1>
+        <p class="subtitle clickable" id="gmailSubtitle"></p>
+        
+        <div class="login-section">
+            <div class="g_id_signin"
+                 data-type="standard"
+                 data-theme="filled_blue"
+                 data-text="signin_with"
+                 data-shape="rectangular"
+                 data-logo_alignment="left"
+                 data-width="300">
+            </div>
+        </div>
+        
+<div id="a2" class="a2" style="display:none; justify-content: center;">
+  <button id="goto2" class="btn btn-primary">
+    <span class="icon">📧</span>進入系統
+  </button>
+</div>
+
+
+
+
+        <div id="statusMessage" class="status"></div>
+        
+        <div id="userInfo" class="user-info"   style="display: none;">
+            <div class="avatar-section">
+                <img id="userAvatar" class="avatar" src="" alt="用户頭像">
+  
+                <div class="welcome-text"><span id="userGreeting"></span></div>
+            </div>
+            
+            <div class="info-grid" style="display: none;">
+                <div class="info-item">
+                    <span class="label">姓名</span>
+                    <span id="userName" class="value"></span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Gmail邮箱</span>
+                    <span id="userEmail" class="value"></span>
+                </div>
+                <div class="info-item">
+                    <span class="label">用户ID</span>
+                    <span id="userId" class="value"></span>
+                </div>
+                <div class="info-item">
+                    <span class="label">邮箱验证</span>
+                    <span id="emailVerified" class="value"></span>
+                </div>
+                <div class="info-item">
+                    <span class="label">区域设置</span>
+                    <span id="userLocale" class="value"></span>
+                </div>
+                <div class="info-item">
+                    <span class="label">域名</span>
+                    <span id="userDomain" class="value"></span>
+                </div>
+            </div>
+            
+
+
+            <div class="actions" style="display: none;">
+                <button id="gmailBtn" class="btn btn-primary">
+                    <span class="icon">📧</span> 打开Gmail
+                </button>
+                <button id="logoutBtn" class="btn btn-danger">
+                    <span class="icon">🚪</span> 退出登录
+                </button>
+            </div>
+        </div>
+        
+        <div id="note" class="note">
+            <p><strong>提醒：</strong>請點選上方帳號登入，進入系統</p>
+        </div>
+    </div>
+
+  <script>
+var urlParams = new URLSearchParams(window.location.search);
+var go2 = urlParams.get('go');
+
+
+
+        let currentUserEmail = ''; // 存储当前用户的邮箱
+        
+        // 处理Google登录成功
+function handleCredentialResponse(response) {
+            // 解码JWT令牌以获取用户信息
+            var responsePayload = parseJwt(response.credential);
+            
+            // 存储用户邮箱
+            currentUserEmail = responsePayload.email;
+//alert("登入的 Gmail 帳號:"+ currentUserEmail);
+//alert("==");
+
+
+            // 显示用户信息
+            //document.getElementById('userAvatar').src = responsePayload.picture;
+            //document.getElementById('userGreeting').textContent = responsePayload.given_name || responsePayload.name;
+            //document.getElementById('userName').textContent = responsePayload.name;
+            //document.getElementById('userEmail').textContent = responsePayload.email;
+            //document.getElementById('userId').textContent = responsePayload.sub;
+            //document.getElementById('userLocale').textContent = responsePayload.locale || '未设置';
+            //document.getElementById('userDomain').textContent = responsePayload.hd || 'gmail.com';
+            localStorage.setItem("GM", responsePayload.email);//全域變數
+
+document.getElementById('a2').style.display='flex';
+
+
+            // 邮箱验证状态
+            var emailVerifiedElement = document.getElementById('emailVerified');
+            if (responsePayload.email_verified) {
+                emailVerifiedElement.innerHTML = '<span class="badge verified">已验证 ✓</span>';
+            } else {
+                emailVerifiedElement.innerHTML = '<span class="badge not-verified">未验证 ✗</span>';
+            }
+            
+            // 显示用户信息区域
+            document.getElementById('userInfo').classList.add('active');
+            localStorage.setItem("GM",responsePayload.email);//全域變數
+window.location.href = "exam2.htm";
+//alert("2");
+//document.getElementById('note').textContent="登入帳號："+aaa;
+
+
+
+            // 显示成功消息
+            showStatus(`成功登录！欢迎回到您的Gmail账户：${responsePayload.email}`, 'success');
+            
+            console.log('完整的用户信息:', responsePayload);
+            
+            // 保存用户信息到本地存储（可选）
+            localStorage.setItem('googleUserInfo', JSON.stringify(responsePayload));
+        }
+        
+        // 点击副标题显示Gmail邮箱
+        document.getElementById('gmailSubtitle').addEventListener('click', function() {
+            if (currentUserEmail) {
+                alert(`==3GMAIL: ${currentUserEmail}`);
+            } else {
+                alert('请先登录您的Google账户');
+            }
+        });
+        
+        // 解析JWT令牌
+        function parseJwt(token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+         
+            return JSON.parse(jsonPayload);
+        }
+        
+        // 显示状态消息
+        function showStatus(message, type) {
+            var statusElement = document.getElementById('statusMessage');
+            statusElement.textContent = message;
+            statusElement.className = 'status ' + type;
+
+            // 5秒后隐藏消息
+            setTimeout(() => {
+                statusElement.className = 'status';
+            }, 5000);
+        }
+        
+        // 打开Gmail
+        document.getElementById('gmailBtn').addEventListener('click', function() {
+            window.open('https://mail.google.com', '_blank');
+        });
+        
+        // 退出登录
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            // 隐藏用户信息
+            document.getElementById('userInfo').classList.remove('active');
+            
+            // 清除当前用户邮箱
+            currentUserEmail = '';
+            
+            // 清除本地存储
+            localStorage.removeItem('googleUserInfo');
+            
+            // 显示退出成功消息
+            showStatus('您已成功退出登录', 'info');
+            
+            // 在实际应用中，这里应该调用Google的退出API
+            console.log('用户退出登录');
+            
+            // 重新加载页面以重置状态
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        });
+        
+        // 初始化Google登录
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: "223668604325-vob9u00djcnt8umdvjce1mjchmgm0jd0.apps.googleusercontent.com",
+                callback: handleCredentialResponse,
+                auto_select: false,
+                cancel_on_tap_outside: true
+            });
+            
+            google.accounts.id.renderButton(
+                document.querySelector(".g_id_signin"),
+                { theme: "filled_blue", size: "large", width: 300 }
+            );
+
+
+            var savedUserInfo = localStorage.getItem('googleUserInfo');  //有無暫存
+
+            if (savedUserInfo) {
+                var userInfo = JSON.parse(savedUserInfo);
+               currentUserEmail = userInfo.email;
+
+
+localStorage.setItem("GM",currentUserEmail);//全域變數
+
+//alert(currentUserEmail);
+aaa=currentUserEmail;
+document.getElementById('note').textContent="登入帳號："+aaa;
+
+//document.getElementById('userEmail').textContent =currentUserEmail;
+document.getElementById('a2').style.display='flex';
+
+                //showStatus('檢測目前登錄帳號，可重新登錄查看最新訊息', 'info');
+            }
+            
+            // 检查是否有已保存的用户信息
+
+
+
+        };
+    </script>
+</body>
+</html>

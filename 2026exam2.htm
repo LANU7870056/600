@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<script src="2026exa.js"></script>
+
+
+<script>
+window.onload = function() {
+  let A2 = localStorage.getItem("GM");
+  console.log("GM =", A2);  // 在開發者工具中查看值
+  studentId.value=A2;
+  //alert("GM 值為：" + A2);  // 顯示目前的值
+
+
+if (!A2 || A2 == 'null' || A2.trim().length === 0) {      
+       window.location.href = "2026exam1.htm";
+      } else {
+        document.getElementById('gm').value = A2;
+      }
+    };
+
+</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>期末考線上測驗系統</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f9ff; /* 馬卡龍藍色背景 */
+        }
+        .macaron-pink { background-color: #fce7f3; color: #831843; }
+        .macaron-blue { background-color: #e0f2fe; color: #075985; }
+        .macaron-green { background-color: #f0fdf4; color: #14532d; }
+        .macaron-yellow { background-color: #fefce8; color: #713f12; }
+        .macaron-purple { background-color: #f5f3ff; color: #4c1d95; }
+            
+        .btn {
+            transition: all 0.2s ease-in-out;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            font-size: 1.125rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+        .option-btn.selected {
+            background-color: #60a5fa; /* 深一點的藍色表示已選擇 */
+            color: white;
+            border: 2px solid #2563eb;
+        }
+        .correct {
+            background-color: #dcfce7 !important;
+            border-color: #22c55e !important;
+            color: #15803d !important;
+        }
+        .incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #b91c1c !important;
+        }
+        .app-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background-color: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            padding: 2.5rem;
+            border: 1px solid #e5e7eb;
+        }
+        input[type="text"] {
+            font-size: 1.125rem;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+        }
+    </style>
+</head>
+<body class="antialiased text-slate-800">
+
+    <div id="app-container" class="app-container">
+
+        <div id="start-screen">
+            <div class="text-center">
+                <h1 class="text-5xl font-bold text-blue-600 mb-2">🚀 期末考 🚀</h1>
+                <p class="text-xl text-slate-500 mb-8">等候老師指令，準備進入期末考試</p>
+            </div>
+            <div class="space-y-6">
+                <div>
+                    <label for="studentId" class="text-lg font-medium text-slate-700">Gmail</label>
+                    <input type="text" id="studentId" readonly style="background-color: #f0f0f0;" class="mt-1 block w-full border border-slate-300 focus:ring-blue-500 focus:border-blue-500" placeholder="">
+
+
+
+                </div>
+                <div>
+                    <label for="studentName" class="text-lg font-medium text-slate-700">班級座號</label>
+                    <input type="text" id="studentName" style="background-color: #f0f0f0;" class="mt-1 block w-full border border-slate-300 focus:ring-blue-500 focus:border-blue-500" placeholder="請輸入您的班級座號（4碼）">
+                </div><font color="#F00">待老師口令，才能按「開始測驗」<br>考試時間20分鐘，要「繳交試卷」評分請舉手，待老師到座位旁，再按「繳交試卷」</font>
+	<div id="sayy">檢查中……</div>
+                <button style="display: none;" id="start-btn" class="w-full btn bg-blue-500 text-white hover:bg-blue-600">開始測驗</button>
+            </div>
+        </div>
+
+        <div id="quiz-screen" class="hidden">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b">
+                <div class="flex items-baseline gap-3">
+                    <span id="quiz-student-info" class="text-2xl font-semibold text-slate-600"></span>
+                    <h2 class="text-3xl font-bold text-blue-600">測驗進行中...</h2>
+                </div>
+                <div id="timer" class="text-2xl font-semibold macaron-pink px-4 py-2 rounded-lg">⏱️ 00:00</div>
+            </div>
+                
+            <div class="mb-6">
+                <p id="question-counter" class="text-lg font-medium text-slate-500 text-right"></p>
+                <p id="question-text" class="text-2xl font-semibold my-4 min-h-[100px]"></p>
+            </div>
+
+            <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                </div>
+
+            <div id="navigation-container" class="flex justify-between mt-10">
+                <button id="prev-btn" class="btn bg-slate-200 text-slate-700 hover:bg-slate-300">上一題</button>
+                <button id="next-btn" class="btn bg-blue-500 text-white hover:bg-blue-600">下一題</button>
+                <span id="submit-btn2" class="hidden btn bg-red-500 text-white hover:bg-red-600">==請舉手等待老師來到，才能按「繳交試卷」==</span>
+                <button id="submit-btn" class="hidden btn bg-green-500 text-white hover:bg-green-600">繳交試卷</button>
+
+            </div>
+        </div>
+
+        <div id="results-screen" class="hidden">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold text-blue-600 mb-4">測驗結果　<button onclick="shutdownChrome()">【關閉系統】</button></h2>
+
+                <p class="text-lg text-slate-600 mb-2">Gmail：<span id="result-student-id" class="font-semibold"></span></p>
+                <p class="text-lg text-slate-600 mb-6">班級座號：<span id="result-student-name" class="font-semibold"></span></p>
+
+                <div class="flex justify-center items-center gap-8 my-8">
+                    <div class="macaron-green p-6 rounded-2xl text-center">
+                        <p class="text-xl">總分</p>
+                        <p id="score" class="text-6xl font-bold"></p>
+                    </div>
+                    <div class="macaron-blue p-6 rounded-2xl text-center">
+                        <p class="text-xl">測驗時間</p>
+                        <p id="time-taken" class="text-3xl font-bold"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-2xl font-bold text-slate-700 mb-4 border-b pb-2">題目詳解(待老師登記後通知，按上方「關閉系統」)</h3>
+                <div id="detailed-results" class="space-y-6">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+
+    const storedGM = localStorage.getItem('Global_GM');
+    const storedSEAT = localStorage.getItem('Global_SEAT');
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const studentIdInput = document.getElementById('studentId');
+        const studentNameInput = document.getElementById('studentName');
+            
+        if (studentIdInput) {
+            studentIdInput.value = storedGM || '';
+            studentNameInput.value = storedSEAT || '';
+        }
+    });
+
+</script>
+
+
+<script>
+ 
+
+    // --- DOM 元素 ---
+    const startScreen = document.getElementById('start-screen');
+    const quizScreen = document.getElementById('quiz-screen');
+    const resultsScreen = document.getElementById('results-screen');
+
+    const studentIdInput = document.getElementById('studentId'); // GMAIL
+    const studentNameInput = document.getElementById('studentName'); // 班級座號
+    const startBtn = document.getElementById('start-btn');
+
+    const quizStudentInfoEl = document.getElementById('quiz-student-info');
+    const timerEl = document.getElementById('timer');
+    const questionCounterEl = document.getElementById('question-counter');
+    const questionTextEl = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const submitBtn = document.getElementById('submit-btn');
+    const restartBtn = document.getElementById('restart-btn');
+    const submitBtn2 = document.getElementById('submit-btn2');
+
+
+    const downloadPdfBtn = document.getElementById('download-pdf-btn');
+    const downloadCsvBtn = document.getElementById('download-csv-btn');
+
+    // --- 應用程式狀態 ---
+    let quizQuestions = [];
+    let currentQuestionIndex = 0;
+    let userAnswers = [];
+    let timerInterval;
+    let secondsElapsed = 0;
+    const totalQuizQuestions = 20;
+
+    // --- 函式 ---
+
+    // 洗牌演算法 (Fisher-Yates)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function showModal(message) {
+        alert(message);
+    }
+
+    function startQuiz() {
+        const studentId = studentIdInput.value.trim();
+        const studentName = studentNameInput.value.trim();
+
+        //if (!studentId || !studentName) {
+            //showModal('請輸入 Gmail 和班級座號！');
+            //return;
+        //}
+
+        quizStudentInfoEl.textContent = `${studentId} ${studentName}`;
+
+        // 初始化/重設狀態
+        secondsElapsed = 0;
+        currentQuestionIndex = 0;
+
+        // 隨機抽題並洗牌選項
+        quizQuestions = shuffleArray([...questionBank]).slice(0, totalQuizQuestions);
+        quizQuestions.forEach(q => shuffleArray(q.options));
+        
+        userAnswers = new Array(quizQuestions.length).fill(null);
+
+        startScreen.classList.add('hidden');
+        resultsScreen.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+
+        startTimer();
+        renderQuestion();
+    }
+
+    function renderQuestion() {
+        const question = quizQuestions[currentQuestionIndex];
+        questionCounterEl.textContent = `第 ${currentQuestionIndex + 1} / ${quizQuestions.length} 題`;
+        questionTextEl.textContent = question.question;
+
+        optionsContainer.innerHTML = '';
+        question.options.forEach(option => {
+            const button = document.createElement('button');
+            button.textContent = option;
+            button.classList.add('btn', 'option-btn', 'macaron-purple', 'w-full', 'text-left');
+            if (userAnswers[currentQuestionIndex] === option) {
+                button.classList.add('selected');
+            }
+            button.onclick = () => selectAnswer(option);
+            optionsContainer.appendChild(button);
+        });
+        
+        updateNavigation();
+    }
+    
+    function selectAnswer(option) {
+        userAnswers[currentQuestionIndex] = option;
+        // 更新選項按鈕樣式
+        const buttons = optionsContainer.querySelectorAll('.option-btn');
+        buttons.forEach(btn => {
+            if (btn.textContent === option) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.remove('selected');
+            }
+        });
+
+        // 自動跳到下一題，如果是最後一題則停住
+        setTimeout(() => {
+            if (currentQuestionIndex < quizQuestions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                updateNavigation();
+            }
+        }, 200);
+    }
+
+    function updateNavigation() {
+        prevBtn.classList.toggle('hidden', currentQuestionIndex === 0);
+        nextBtn.classList.toggle('hidden', currentQuestionIndex === quizQuestions.length - 1);
+        submitBtn.classList.toggle('hidden', currentQuestionIndex !== quizQuestions.length - 1);
+        submitBtn2.classList.toggle('hidden', currentQuestionIndex !== quizQuestions.length - 1);
+    }
+
+    function prevQuestion() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            renderQuestion();
+        }
+    }
+
+    function nextQuestion() {
+        if (currentQuestionIndex < quizQuestions.length - 1) {
+            currentQuestionIndex++;
+            renderQuestion();
+        }
+    }
+    
+    async function submitQuiz() {
+        const unanswered = userAnswers.filter(a => a === null).length;
+        const confirmationMessage = unanswered > 0
+            ? `您還有 ${unanswered} 題未作答，確定要繳交嗎？`
+            : `確定要繳交試卷嗎？`;
+        
+        if (!confirm(confirmationMessage)) {
+            return;
+        }
+
+        clearInterval(timerInterval);
+        
+        // --- 計算分數 ---
+        let score = 0;
+        quizQuestions.forEach((q, index) => {
+            if(q.answer === userAnswers[index]) {
+                score += 100 / quizQuestions.length;
+            }
+        });
+        const finalScore = Math.round(score);
+
+        // --- 呼叫 Apps Script 儲存成績 ---
+        // !!! 請將這裡替換成您部署 toscore.gs 後取得的實際執行 URL !!!
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbwIgufZWQ1XPEJ1eQ_eQwAEJnIjxdjZoB_hIuNCoNgf6AXDHRG06CBGuTf_7vJQi2Xq4Q/exec'; 
+
+        const resultData = {
+            action: 'saveScore',
+            date: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' }),
+            gmail: studentIdInput.value.trim(),
+            score: finalScore,
+            seat: studentNameInput.value.trim()
+        };
+
+        try {
+            const response = await fetch(scriptUrl, {
+                method: 'POST',
+                mode: 'no-cors', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(resultData)
+            });
+
+            console.log('成績發送至 Apps Script 完成。');
+            showModal('成績已成功送出！');
+
+	//alert("分數："+score);
+	//window.close();
+
+
+
+
+        } catch (error) {
+            console.error('發送成績至 Apps Script 失敗:', error);
+            showModal('⚠ 成績送出失敗，請立即告知老師！');
+        }
+        // --- 儲存成績結束 ---
+
+        quizScreen.classList.add('hidden');
+        resultsScreen.classList.remove('hidden');
+        renderResults(finalScore);
+    }
+    
+    function renderResults(finalScore) {
+        document.getElementById('score').textContent = finalScore;
+        document.getElementById('result-student-id').textContent = studentIdInput.value;
+        document.getElementById('result-student-name').textContent = studentNameInput.value;
+        document.getElementById('time-taken').textContent = formatTime(secondsElapsed);
+        
+        const detailedResultsContainer = document.getElementById('detailed-results');
+        detailedResultsContainer.innerHTML = '';
+
+        quizQuestions.forEach((q, index) => {
+            const resultDiv = document.createElement('div');
+            resultDiv.classList.add('p-4', 'rounded-lg', 'border');
+            
+            const userAnswer = userAnswers[index];
+            const isCorrect = userAnswer === q.answer;
+            
+            resultDiv.innerHTML = `
+                <p class="font-bold text-lg mb-2">${index + 1}. ${q.question}</p>
+                <p class="pl-4 mb-1 ${isCorrect ? 'text-green-600' : 'text-red-600'}">
+                    你的答案：${userAnswer || '未作答'} 
+                    ${isCorrect ? '✔️' : '❌'}
+                </p>
+                ${!isCorrect ? `<p class="pl-4 mb-2 text-blue-700">正確答案：${q.answer}</p>` : ''}
+                <div class="mt-2 p-3 macaron-yellow rounded-md">
+                    <p class="font-semibold">詳解：</p>
+                    <p>${q.explanation}</p>
+                </div>
+            `;
+            
+            resultDiv.classList.add(isCorrect ? 'bg-green-50' : 'bg-red-50');
+            detailedResultsContainer.appendChild(resultDiv);
+        });
+    }
+    
+    function startTimer() {
+        clearInterval(timerInterval); // 先清除既有的計時器
+        timerInterval = setInterval(() => {
+            secondsElapsed++;
+            timerEl.textContent = `⏱️ ${formatTime(secondsElapsed)}`;
+        }, 1000);
+    }
+
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const secs = (seconds % 60).toString().padStart(2, '0');
+        return `${mins}:${secs}`;
+    }
+    
+    function restartQuiz() {
+        clearInterval(timerInterval);
+        resultsScreen.classList.add('hidden');
+        quizScreen.classList.add('hidden');
+        startScreen.classList.remove('hidden');
+    }
+    
+    // --- 下載功能 (保持不變) ---
+    const { jsPDF } = window.jspdf;
+
+    function downloadPDF() {
+        const doc = new jsPDF();
+        
+        doc.setFontSize(22);
+        doc.text("Quiz Result", 105, 20, null, null, "center");
+
+        doc.setFontSize(12);
+        doc.text(`Gmail: ${studentIdInput.value}`, 20, 40);
+        doc.text(`班級座號: ${studentNameInput.value}`, 20, 50);
+        doc.text(`Score: ${document.getElementById('score').textContent}`, 120, 40);
+        doc.text(`Time Taken: ${formatTime(secondsElapsed)}`, 120, 50);
+
+        const tableColumn = ["#", "Question", "Your Answer", "Correct Answer", "Result"];
+        const tableRows = [];
+
+        quizQuestions.forEach((q, index) => {
+            const isCorrect = userAnswers[index] === q.answer;
+            const row = [
+                index + 1,
+                q.question, 
+                userAnswers[index] || "N/A",
+                q.answer,
+                isCorrect ? "Correct" : "Incorrect"
+            ];
+            tableRows.push(row);
+        });
+
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRows,
+            startY: 60,
+        });
+        
+        doc.save(`quiz-result-${studentIdInput.value}.pdf`);
+    }
+
+    function downloadCSV() {
+        let csvContent = "data:text/csv;charset=utf-8,\ufeff"; // BOM for UTF-8
+        csvContent += "日期,GMAIL,總分,班級座號,測驗時間\n";
+        csvContent += `${new Date().toLocaleDateString()},${studentIdInput.value},${document.getElementById('score').textContent},${studentNameInput.value},${formatTime(secondsElapsed)}\n\n`;
+
+        csvContent += "題號,題目,你的答案,正確答案,結果\n";
+        quizQuestions.forEach((q, index) => {
+            const isCorrect = userAnswers[index] === q.answer;
+            const row = [
+                index + 1,
+                `"${q.question.replace(/"/g, '""')}"`, // 處理引號
+                userAnswers[index] || "未作答",
+                q.answer,
+                isCorrect ? "答對" : "答錯"
+            ].join(',');
+            csvContent += row + "\r\n";
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `quiz-result-${studentIdInput.value}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+//~~~~~~~~~~~~
+
+ // 您提供的 Google Apps Script URL
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzzPfTPtIs7k7q8tVMwpiWQpRMbV_-5rxo82YHkTGExdQoevZy7GEF9tsQmy8OvXGhOgw/exec"; 
+    
+    // 獲取 HTML 元素 (這些元素必須在 HTML 頁面中存在)
+    const form = document.getElementById('queryForm');
+    const gmailInput = document.getElementById('gmailInput');
+    const resultDiv = document.getElementById('result');
+    const submitButton = document.getElementById('submitButton');
+
+    // 預設查詢的 GMAIL 帳號
+    const DEFAULT_GMAIL = storedGM;
+
+    /**
+     * 自動執行 GMAIL 分數查詢的函式
+     */
+    function autoQuery() {
+        // 設定輸入框值和狀態
+        if (gmailInput) {
+            gmailInput.value = DEFAULT_GMAIL;
+        }
+        if (resultDiv) {
+            resultDiv.className = '';
+            resultDiv.innerHTML = '網頁已自動執行查詢中，請稍候...';
+        }
+        if (submitButton) {
+            submitButton.disabled = true;
+        }
+        
+        const gmail = DEFAULT_GMAIL; // 直接使用預設值
+        
+        // 使用 FormData 建立要傳送的資料
+        const formData = new FormData();
+        formData.append('gmail', gmail); 
+
+        // ------------------------------------
+        // Fetch 查詢邏輯
+        // ------------------------------------
+        fetch(GAS_URL, {
+            method: 'POST',
+            body: formData 
+        })
+        .then(response => {
+            if (!response.ok) {
+                // 如果是 HTTP 錯誤，拋出錯誤訊息
+                throw new Error(`伺服器錯誤 (HTTP ${response.status})`);
+            }
+            return response.json(); 
+        })
+        .then(data => {
+            // 查詢完成，恢復按鈕狀態
+            if (submitButton) submitButton.disabled = false;
+
+            if (data && data.score !== undefined) {
+                const score = data.score;
+                
+                if (score.toString().includes('查無')) {
+                    // 查無紀錄
+                    //resultDiv.className = 'error';
+                    //resultDiv.innerHTML = `GMAIL <strong>${gmail}</strong>：${score}`;
+                    //alert(`~~+++查詢結果：${score}`);
+document.getElementById("sayy").innerText="準備進入測驗……"
+   	   document.getElementById("start-btn").style.display = "block";
+                } else {
+                    // 成功顯示分數
+                    //resultDiv.className = 'success';
+                    //resultDiv.innerHTML = `GMAIL: <strong>${data.gmail}</strong><br>分數: <strong style="font-size: 1.5em;">${score}</strong>`;
+                    //alert(`====GMAIL ${data.gmail} 的分數是：${score}`);
+
+	   document.getElementById("sayy").innerText ="已有考試成績，無法再測驗。";
+   	   document.getElementById("start-btn").style.display = "none";
+
+
+
+                }
+            } else {
+                //resultDiv.className = 'error';
+                //resultDiv.textContent = '查詢失敗：伺服器回傳資料格式錯誤。';
+                alert('查詢失敗：伺服器回傳資料格式錯誤。');
+            }
+        })
+        .catch(error => {
+            // 發生錯誤
+            if (submitButton) submitButton.disabled = false;
+            console.error('查詢發生錯誤:', error);
+            //resultDiv.className = 'error';
+            //const errorMessage = `查詢發生錯誤： ${error.message}。請檢查 GAS URL 或網路連線。`;
+            //resultDiv.textContent = errorMessage;
+            alert(errorMessage);
+        });
+    }
+
+    // ------------------------------------
+    // 立即執行查詢函式
+    // ------------------------------------
+    autoQuery();
+
+////~~~~~~~~~~~~
+
+    // --- 事件監聽 ---
+    startBtn.addEventListener('click', startQuiz);
+    prevBtn.addEventListener('click', prevQuestion);
+    nextBtn.addEventListener('click', nextQuestion);
+    submitBtn.addEventListener('click', submitQuiz);
+    restartBtn.addEventListener('click', restartQuiz);
+    
+    downloadPdfBtn.addEventListener('click', downloadPDF);
+    downloadCsvBtn.addEventListener('click', downloadCSV);
+
+
+
+function shutdownChrome() {
+    window.open('','_self').close();    
+    // 如果上面那行沒效，程式碼會繼續往下執行
+    // 清空 body 內容並顯示提示  
+
+}
+</script>
+</body>
+</html>

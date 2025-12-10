@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<meta charset="UTF-8">
+<head>
+
+
+<script>
+localStorage.setItem("GM",null);
+localStorage.setItem("googleUserInfo",null);
+</script>
+
+<div class="df2">
+<button2 onclick="shutdownChrome()">關閉系統</button2>
+</div>
+
+<div class="df">
+<BR><BR><BR><BR>
+<button onclick="openFullscreenWindow('2026exam1.htm')">【進入測驗】</button>
+</div>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+    /* 定義 .df 的樣式 */
+  .df2 {
+        display: flex;           /* 啟用 Flexbox 排版 */
+         justify-content: left; /* 水平置中 */
+        align-items: center;     /* 垂直置中 */
+       font-size: 15px;         /* 字體大小 20px */
+}
+
+
+    .df {
+        display: flex;           /* 啟用 Flexbox 排版 */
+        justify-content: center; /* 水平置中 */
+        align-items: center;     /* 垂直置中 */
+        flex-direction: column;  /* 讓按鈕垂直排列 (因為您原本中間有 BR 換行) */
+        font-size: 20px;         /* 字體大小 20px */
+        
+        /* 如果希望這區塊佔滿整個畫面高度來置中，請取消下面這行的註解 */
+        /* height: 100vh; */     
+        
+        /* 增加一點間距讓按鈕不會黏在一起 */
+        gap: 20px; 
+    }
+
+    /* 稍微美化一下按鈕 (選用) */
+
+button2 {
+        font-size: 20px; /* 讓按鈕文字也繼承大小 */
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+    button {
+        font-size: 20px; /* 讓按鈕文字也繼承大小 */
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+</style>
+
+
+<script>
+function shutdownChrome() {
+
+   alert("按下Ctrl+w關閉視窗");
+window.opener=null;
+window.close();
+    window.open('','_self').close();
+}
+
+
+
+
+function openFullscreenWindow(url) {
+    // 嘗試將窗口設定為螢幕的寬度和高度
+    var width = screen.width;
+    var height = screen.height;
+    
+    // 設定窗口功能：隱藏工具欄、菜單欄、狀態欄等
+    var features = 'fullscreen=yes, scrollbars=no, resizable=yes, top=0, left=0, width=' + width + ', height=' + height;
+    
+    // 開啟新窗口
+    var newWindow = window.open(url, '_blank', features);
+    
+    // 某些瀏覽器可能需要手動移動和調整大小來實現最大化
+    if (newWindow) {
+        newWindow.moveTo(0, 0);
+        newWindow.resizeTo(width, height);
+    }
+}
+
+// 範例：點擊按鈕時開啟 123.HTM
+// 這必須由使用者點擊的事件來觸發
+// openFullscreenWindow('123.HTM');
+
+</script>
