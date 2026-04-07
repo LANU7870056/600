@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -195,7 +196,7 @@
     let userAnswers = [];
     let timerInterval;
     let secondsElapsed = 0;
-    const totalQuizQuestions = 20;
+    const totalQuizQuestions = 25;
 
     // --- 函式 ---
 
@@ -391,9 +392,7 @@
                     ${isCorrect ? '✔️' : '❌'}
                 </p>
                 ${!isCorrect ? `<p class="pl-4 mb-2 text-blue-700">正確答案：${q.answer}</p>` : ''}
-                <div class="mt-2 p-3 macaron-yellow rounded-md">
-                    <p class="font-semibold">詳解：</p>
-                    <p>${q.explanation}</p>
+                <div class="mt-2 p-3 macaron-yellow rounded-md">                 
                 </div>
             `;
             
